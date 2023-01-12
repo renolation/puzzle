@@ -12,6 +12,8 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>This permission is required to add custom images to your card editor</string>
 	<key>CFBundleName</key>
 	<string>reno_puzzle</string>
 	<key>CFBundlePackageType</key>
