@@ -29,14 +29,14 @@ class MainScreen extends HookConsumerWidget {
                 Icons.add,
                 color: Colors.red,
               )),
-          TextButton(
-              onPressed: () {
-                ref.read(listImageProvider.notifier).state.shuffle();
-              },
-              child: const Icon(
-                Icons.add,
-                color: Colors.black,
-              )),
+          // TextButton(
+          //     onPressed: () {
+          //       ref.read(listImageProvider.notifier).state.shuffle();
+          //     },
+          //     child: const Icon(
+          //       Icons.add,
+          //       color: Colors.black,
+          //     )),
         ],
       ),
       body: Container(
@@ -48,21 +48,24 @@ class MainScreen extends HookConsumerWidget {
             height: 300,
             width: 300,
           ),
+          // Text(listImage.length.toString()),
           Container(
               width: 300,
               height: 300,
               child: GridView.builder(
-                  itemCount: listImage.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
+                  itemCount: listImage.length * listImage[0].length,
+                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: listImage[0].length,
                       childAspectRatio: 1,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5),
                   itemBuilder: (context, index) {
+                    int row = index ~/ listImage[0].length;
+                    int col = index % listImage[0].length;
                     return Container(
                         color: Colors.transparent,
-                        // child: Text('${listImage[index].index}'));
-                        child: Image.memory(listImage[index].unit8List!));
+                        // child: Text('${listImage[index]}'));
+                        child: Image.memory(listImage[row][col].unit8List!));
                   })),
         ],
       )),
@@ -75,50 +78,5 @@ class MainScreen extends HookConsumerWidget {
     );
   }
 
-  List<Image> splitImage(List<int> input) {
-    // convert image to image from image package
-    // img.Image? image = img.decodeImage(Uint8List.fromList(input));
-    img.Image? image =
-        cropCenterSquare(img.decodeImage(Uint8List.fromList(input)));
-    int x = 0, y = 0;
-    int width = (image!.width / 3).floor();
-    int height = (image.height / 3).floor();
 
-    // split image to parts
-    List<img.Image> parts = <img.Image>[];
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-        parts
-            .add(img.copyCrop(image, x: x, y: y, width: width, height: height));
-        x += width;
-      }
-      x = 0;
-      y += height;
-    }
-
-    // convert image from image package to Image Widget to display
-    List<Image> output = <Image>[];
-    for (var image in parts) {
-      output.add(Image.memory(img.encodeJpg(image)));
-    }
-    print(output.length);
-    return output;
-  }
-
-  img.Image? cropCenterSquare(img.Image? image) {
-    int width = image!.width;
-    int height = image.height;
-    int left = 0;
-    int top = 0;
-    int right = 0;
-    int bottom = 0;
-
-    final shorterSide = width > height ? height : width;
-    img.Image cropped = img.copyCrop(image,
-        x: width ~/ 2 - shorterSide ~/ 2,
-        y: height ~/ 2 - shorterSide ~/ 2,
-        width: shorterSide,
-        height: shorterSide);
-    return cropped;
-  }
 }

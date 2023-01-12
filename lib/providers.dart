@@ -9,13 +9,13 @@ import 'models/puzzle.dart';
 
 final photoProvider = StateProvider<String>((ref) => '');
 
-final listImageProvider = StateProvider<List<Image>>((ref) => []);
+// final listImageProvider = StateProvider<List<Image>>((ref) => []);
 
-final listImageControllerProvider = StateNotifierProvider.autoDispose<ListImageController, List<Puzzle>>((ref){
+final listImageControllerProvider = StateNotifierProvider.autoDispose<ListImageController, List<List<Puzzle>>>((ref){
   return ListImageController();
 });
 
-class ListImageController extends StateNotifier<List<Puzzle>> {
+class ListImageController extends StateNotifier<List<List<Puzzle>>> {
   ListImageController(): super([]);
 
    splitImage(List<int> input)  {
@@ -35,20 +35,19 @@ class ListImageController extends StateNotifier<List<Puzzle>> {
       y += height;
     }
 
-    // convert image from image package to Image Widget to display
-    List<Puzzle> output = <Puzzle>[];
-    img.Color color = img.ColorRgba8(Colors.red.red,Colors.red.green,Colors.red.blue,Colors.red.alpha);
+    List<Puzzle> output = [];
+
     for(int i = 0; i< parts.length;i++){
+      img.Color color = img.ColorRgba8(Colors.red.red,Colors.red.green,Colors.red.blue,Colors.red.alpha);
       if(i == parts.length -1){
         img.fill(parts[i], color: color);
       }
       Puzzle puzzle = Puzzle(unit8List: img.encodeJpg(parts[i]), index: i);
       output.add(puzzle);
+     }
+    List<List<Puzzle>> matrix = List.generate(3, (i) => output.sublist(i*3, i*3+3));
 
-    }
-    print(output.length);
-
-    state = output;
+    state = matrix;
     // return output;
   }
 
