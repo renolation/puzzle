@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:reno_puzzle/providers.dart';
+
 class MainScreen extends HookConsumerWidget {
   const MainScreen({
     Key? key,
@@ -13,54 +14,72 @@ class MainScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final photoFile =  ref.watch(photoProvider);
-    final listImage = ref.watch(listImageProvider);
+    final photoFile = ref.watch(photoProvider);
+    final listImage = ref.watch(listImageControllerProvider);
     return Scaffold(
       appBar: AppBar(
         actions: [
-          TextButton(onPressed: (){
-            ref.read(listImageProvider.notifier).state = splitImage(File(photoFile).readAsBytesSync());
-          }, child: const Icon(Icons.add, color: Colors.red,)),
+          TextButton(
+              onPressed: () {
+                ref
+                    .read(listImageControllerProvider.notifier)
+                    .splitImage(File(photoFile).readAsBytesSync());
+              },
+              child: const Icon(
+                Icons.add,
+                color: Colors.red,
+              )),
+          TextButton(
+              onPressed: () {
+                ref.read(listImageProvider.notifier).state.shuffle();
+              },
+              child: const Icon(
+                Icons.add,
+                color: Colors.black,
+              )),
         ],
       ),
       body: Container(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.file(File(photoFile), height: 300, width: 300,),
-              Container(
-                  width: 300,
-                  height: 300,
-
-                  child: GridView.builder(
-                    itemCount: listImage.length,
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        // crossAxisCount: isTablet ? 5 : 4,
-                        // childAspectRatio: isTablet? 8/11 : 6/9,
-                          crossAxisCount: 3,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 5),
-                      itemBuilder: (context, index){
-                        return Container(
-                          color: Colors.red,
-                            child: listImage[index]);
-                      })),
-            ],
-          )
-      ),
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.file(
+            File(photoFile),
+            height: 300,
+            width: 300,
+          ),
+          Container(
+              width: 300,
+              height: 300,
+              child: GridView.builder(
+                  itemCount: listImage.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5),
+                  itemBuilder: (context, index) {
+                    return Container(
+                        color: Colors.transparent,
+                        // child: Text('${listImage[index].index}'));
+                        child: Image.memory(listImage[index].unit8List!));
+                  })),
+        ],
+      )),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         final ImagePicker _picker = ImagePicker();
-        final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        final XFile? image =
+            await _picker.pickImage(source: ImageSource.gallery);
         ref.read(photoProvider.notifier).state = image!.path;
       }),
     );
   }
 
-  List<Image> splitImage(List<int> input)  {
+  List<Image> splitImage(List<int> input) {
     // convert image to image from image package
     // img.Image? image = img.decodeImage(Uint8List.fromList(input));
-    img.Image?  image =  cropCenterSquare(img.decodeImage(Uint8List.fromList(input)));
+    img.Image? image =
+        cropCenterSquare(img.decodeImage(Uint8List.fromList(input)));
     int x = 0, y = 0;
     int width = (image!.width / 3).floor();
     int height = (image.height / 3).floor();
@@ -69,7 +88,8 @@ class MainScreen extends HookConsumerWidget {
     List<img.Image> parts = <img.Image>[];
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
-        parts.add(img.copyCrop(image, x: x, y: y, width: width, height: height));
+        parts
+            .add(img.copyCrop(image, x: x, y: y, width: width, height: height));
         x += width;
       }
       x = 0;
