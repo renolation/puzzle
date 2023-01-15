@@ -39,10 +39,12 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
 
     for(int i = 0; i< parts.length;i++){
       img.Color color = img.ColorRgba8(Colors.red.red,Colors.red.green,Colors.red.blue,Colors.red.alpha);
+      Puzzle puzzle = Puzzle(unit8List: img.encodeJpg(parts[i]), index: i);
       if(i == parts.length -1){
         img.fill(parts[i], color: color);
+        puzzle=  puzzle.copyWith(unit8List: img.encodeJpg(parts[i]));
+        puzzle = puzzle.copyWith(isHide: true);
       }
-      Puzzle puzzle = Puzzle(unit8List: img.encodeJpg(parts[i]), index: i);
       output.add(puzzle);
      }
     List<List<Puzzle>> matrix = List.generate(3, (i) => output.sublist(i*3, i*3+3));
@@ -67,5 +69,50 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
         height: shorterSide);
     return cropped;
   }
+
+  List<List<int>> detectNeighbors(List<List<Puzzle>> matrix, List<int> location) {
+    List<List<int>> result = [];
+    int x = location[0];
+    int y = location[1];
+
+    for (int i = x - 1; i <= x + 1; i++) {
+      for (int j = y - 1; j <= y + 1; j++) {
+        if (i >= 0 && i < 3 && j >= 0 && j < 3) {
+          if (matrix[i][j].isHide) {
+            result.add([i, j]);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  List<List<Puzzle>>  swapNeighbors(List<List<Puzzle>> matrix, List<int> location1, List<int> location2) {
+    int x1 = location1[0];
+    int y1 = location1[1];
+    int x2 = location2[0];
+    int y2 = location2[1];
+
+    Puzzle temp = matrix[x1][y1];
+    matrix[x1][y1] = matrix[x2][y2];
+    matrix[x2][y2] = temp;
+    return matrix;
+  }
+
+  void swapNeighborsWithValueZero(List<int> location) {
+    List<List<int>> neighborsWithValueZero = detectNeighbors(state, location);
+    List<List<Puzzle>> matrix = [];
+    if (neighborsWithValueZero.isNotEmpty) {
+      for (var n in neighborsWithValueZero) {
+        matrix = swapNeighbors(state, location, n);
+        state = [...matrix];
+        print('build');
+      }
+    } else {
+      print('wrong');
+    }
+
+  }
+
 
 }

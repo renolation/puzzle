@@ -15,7 +15,6 @@ class MainScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final photoFile = ref.watch(photoProvider);
-    final listImage = ref.watch(listImageControllerProvider);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -39,8 +38,7 @@ class MainScreen extends HookConsumerWidget {
           //     )),
         ],
       ),
-      body: Container(
-          child: Column(
+      body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.file(
@@ -49,26 +47,40 @@ class MainScreen extends HookConsumerWidget {
             width: 300,
           ),
           // Text(listImage.length.toString()),
-          Container(
-              width: 300,
-              height: 300,
-              child: GridView.builder(
-                  itemCount: listImage.length * listImage[0].length,
-                  gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: listImage[0].length,
-                      childAspectRatio: 1,
-                      crossAxisSpacing: 5,
-                      mainAxisSpacing: 5),
-                  itemBuilder: (context, index) {
-                    int row = index ~/ listImage[0].length;
-                    int col = index % listImage[0].length;
-                    return Container(
-                        color: Colors.transparent,
-                        // child: Text('${listImage[index]}'));
-                        child: Image.memory(listImage[row][col].unit8List!));
-                  })),
+          Consumer(builder: (context, ref, child) {
+            final listImage = ref.watch(listImageControllerProvider);
+            print('rebuild');
+            return SizedBox(
+                width: 300,
+                height: 300,
+                child: listImage.isEmpty
+                    ? const SizedBox()
+                    : GridView.builder(
+                        itemCount: listImage.length * listImage[0].length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: listImage[0].length,
+                            childAspectRatio: 1,
+                            crossAxisSpacing: 5,
+                            mainAxisSpacing: 5),
+                        itemBuilder: (context, index) {
+                          int row = index ~/ listImage[0].length;
+                          int col = index % listImage[0].length;
+                          return GestureDetector(
+                            onTap: () {
+                              ref
+                                  .read(listImageControllerProvider.notifier)
+                                  .swapNeighborsWithValueZero([row, col]);
+                            },
+                            child: Container(
+                                color: Colors.transparent,
+                                // child: Text('${listImage[index]}'));
+                                child: Image.memory(
+                                    listImage[row][col].unit8List!)),
+                          );
+                        }));
+          }),
         ],
-      )),
+      ),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         final ImagePicker _picker = ImagePicker();
         final XFile? image =
@@ -77,6 +89,4 @@ class MainScreen extends HookConsumerWidget {
       }),
     );
   }
-
-
 }

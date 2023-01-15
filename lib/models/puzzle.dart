@@ -13,6 +13,7 @@ class Puzzle with _$Puzzle{
   factory Puzzle({
     @Uint8ListConverter() required Uint8List? unit8List,
     required int index,
+    @Default(false) bool isHide,
 
   }) = _Puzzle;
 

@@ -23,6 +23,7 @@ mixin _$Puzzle {
   @Uint8ListConverter()
   Uint8List? get unit8List => throw _privateConstructorUsedError;
   int get index => throw _privateConstructorUsedError;
+  bool get isHide => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +35,8 @@ abstract class $PuzzleCopyWith<$Res> {
   factory $PuzzleCopyWith(Puzzle value, $Res Function(Puzzle) then) =
       _$PuzzleCopyWithImpl<$Res, Puzzle>;
   @useResult
-  $Res call({@Uint8ListConverter() Uint8List? unit8List, int index});
+  $Res call(
+      {@Uint8ListConverter() Uint8List? unit8List, int index, bool isHide});
 }
 
 /// @nodoc
@@ -52,6 +54,7 @@ class _$PuzzleCopyWithImpl<$Res, $Val extends Puzzle>
   $Res call({
     Object? unit8List = freezed,
     Object? index = null,
+    Object? isHide = null,
   }) {
     return _then(_value.copyWith(
       unit8List: freezed == unit8List
@@ -62,6 +65,10 @@ class _$PuzzleCopyWithImpl<$Res, $Val extends Puzzle>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int,
+      isHide: null == isHide
+          ? _value.isHide
+          : isHide // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -72,7 +79,8 @@ abstract class _$$_PuzzleCopyWith<$Res> implements $PuzzleCopyWith<$Res> {
       __$$_PuzzleCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({@Uint8ListConverter() Uint8List? unit8List, int index});
+  $Res call(
+      {@Uint8ListConverter() Uint8List? unit8List, int index, bool isHide});
 }
 
 /// @nodoc
@@ -87,6 +95,7 @@ class __$$_PuzzleCopyWithImpl<$Res>
   $Res call({
     Object? unit8List = freezed,
     Object? index = null,
+    Object? isHide = null,
   }) {
     return _then(_$_Puzzle(
       unit8List: freezed == unit8List
@@ -97,6 +106,10 @@ class __$$_PuzzleCopyWithImpl<$Res>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int,
+      isHide: null == isHide
+          ? _value.isHide
+          : isHide // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -105,7 +118,9 @@ class __$$_PuzzleCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Puzzle implements _Puzzle {
   _$_Puzzle(
-      {@Uint8ListConverter() required this.unit8List, required this.index});
+      {@Uint8ListConverter() required this.unit8List,
+      required this.index,
+      this.isHide = false});
 
   factory _$_Puzzle.fromJson(Map<String, dynamic> json) =>
       _$$_PuzzleFromJson(json);
@@ -115,10 +130,13 @@ class _$_Puzzle implements _Puzzle {
   final Uint8List? unit8List;
   @override
   final int index;
+  @override
+  @JsonKey()
+  final bool isHide;
 
   @override
   String toString() {
-    return 'Puzzle(unit8List: $unit8List, index: $index)';
+    return 'Puzzle(unit8List: $unit8List, index: $index, isHide: $isHide)';
   }
 
   @override
@@ -127,13 +145,14 @@ class _$_Puzzle implements _Puzzle {
         (other.runtimeType == runtimeType &&
             other is _$_Puzzle &&
             const DeepCollectionEquality().equals(other.unit8List, unit8List) &&
-            (identical(other.index, index) || other.index == index));
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.isHide, isHide) || other.isHide == isHide));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(unit8List), index);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(unit8List), index, isHide);
 
   @JsonKey(ignore: true)
   @override
@@ -152,7 +171,8 @@ class _$_Puzzle implements _Puzzle {
 abstract class _Puzzle implements Puzzle {
   factory _Puzzle(
       {@Uint8ListConverter() required final Uint8List? unit8List,
-      required final int index}) = _$_Puzzle;
+      required final int index,
+      final bool isHide}) = _$_Puzzle;
 
   factory _Puzzle.fromJson(Map<String, dynamic> json) = _$_Puzzle.fromJson;
 
@@ -161,6 +181,8 @@ abstract class _Puzzle implements Puzzle {
   Uint8List? get unit8List;
   @override
   int get index;
+  @override
+  bool get isHide;
   @override
   @JsonKey(ignore: true)
   _$$_PuzzleCopyWith<_$_Puzzle> get copyWith =>
