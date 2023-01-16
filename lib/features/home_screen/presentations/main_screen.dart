@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:reno_puzzle/features/home_screen/data/list_image_provider.dart';
 
 import '../data/home_provider.dart';
+import '../data/timer_provider.dart';
 import '../domains/puzzle.dart';
 
 class MainScreen extends HookConsumerWidget {
@@ -47,7 +48,6 @@ class MainScreen extends HookConsumerWidget {
           //       Icons.add,
           //       color: Colors.red,
           //     )),
-
         ],
       ),
       body: SingleChildScrollView(
@@ -68,7 +68,8 @@ class MainScreen extends HookConsumerWidget {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () async {
-                                  ref.read(selectingProvider.notifier).state = index;
+                                  ref.read(selectingProvider.notifier).state =
+                                      index;
                                   final bytes =
                                       await rootBundle.load(data[index]);
                                   ref
@@ -93,7 +94,6 @@ class MainScreen extends HookConsumerWidget {
                 },
               ),
             ),
-
             const SizedBox(
               height: 10,
             ),
@@ -104,10 +104,10 @@ class MainScreen extends HookConsumerWidget {
                   height: 300,
                   child: listImage.isEmpty
                       ? const SizedBox.expand(
-                    child: Center(
-                      child: Text('select'),
-                    ),
-                  )
+                          child: Center(
+                            child: Text('select'),
+                          ),
+                        )
                       : GridView.builder(
                           itemCount: listImage.length * listImage[0].length,
                           gridDelegate:
@@ -121,16 +121,16 @@ class MainScreen extends HookConsumerWidget {
                             int col = index % listImage[0].length;
                             return GestureDetector(
                               onTap: () {
-                                
                                 final neighborsWithValueZero = ref
                                     .read(listImageControllerProvider.notifier)
                                     .swapNeighborsWithValueZero([row, col]);
 
                                 if (neighborsWithValueZero.isNotEmpty) {
-                                  ref.read(moveProvider.notifier).state +=1;
+                                  ref.read(moveProvider.notifier).state += 1;
                                   ref
-                                      .read(listImageControllerProvider.notifier)
-                                      .swap(neighborsWithValueZero ,[row, col]);
+                                      .read(
+                                          listImageControllerProvider.notifier)
+                                      .swap(neighborsWithValueZero, [row, col]);
                                 } else {
                                   print('wrong');
                                 }
@@ -158,7 +158,8 @@ class MainScreen extends HookConsumerWidget {
                         min: 2,
                         max: 10,
                         onChanged: (value) {
-                          ref.read(lengthProvider.notifier).state = value.toInt();
+                          ref.read(lengthProvider.notifier).state =
+                              value.toInt();
                         }),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,15 +168,12 @@ class MainScreen extends HookConsumerWidget {
                         Text(lengthMatrix.toString()),
                         TextButton(
                           onPressed: () async {
-
-                            final bytes =
-                                await rootBundle.load(assets.value![selectingIndex]);
+                            final bytes = await rootBundle
+                                .load(assets.value![selectingIndex]);
                             ref
-                                .read(
-                                listImageControllerProvider.notifier)
-                                .splitImage(bytes.buffer.asUint8List(),
-                                lengthMatrix);
-
+                                .read(listImageControllerProvider.notifier)
+                                .splitImage(
+                                    bytes.buffer.asUint8List(), lengthMatrix);
                           },
                           child: const Text('ok'),
                         ),
@@ -185,9 +183,28 @@ class MainScreen extends HookConsumerWidget {
                 ),
               );
             }),
-            Consumer(builder: (context, ref, child){
+            Consumer(builder: (context, ref, child) {
               final move = ref.watch(moveProvider);
               return Text('$move');
+            }),
+            Consumer(builder: (context, ref, child) {
+              final timer = ref.watch(timerProvider);
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(secondsToMinutes(timer)),
+                  TextButton(
+                      onPressed: () {
+                        ref.read(timerProvider.notifier).start();
+                      },
+                      child: const Text('start')),
+                  TextButton(
+                      onPressed: () {
+                        ref.read(timerProvider.notifier).stop();
+                      },
+                      child: const Text('stop')),
+                ],
+              );
             }),
           ],
         ),
@@ -202,5 +219,17 @@ class MainScreen extends HookConsumerWidget {
             .updateUint8List(newFile.readAsBytesSync());
       }),
     );
+  }
+
+  String secondsToMinutes(int seconds) {
+    final duration = Duration(seconds: seconds);
+    String twoDigits(int n) {
+      if (n >= 10) return "$n";
+      return "0$n";
+    }
+
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$twoDigitMinutes:$twoDigitSeconds";
   }
 }
