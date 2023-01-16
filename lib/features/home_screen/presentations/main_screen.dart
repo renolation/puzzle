@@ -16,6 +16,7 @@ class MainScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final lengthMatrix = ref.watch(lengthProvider);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -23,7 +24,7 @@ class MainScreen extends HookConsumerWidget {
               onPressed: () {
                 ref
                     .read(listImageControllerProvider.notifier)
-                    .splitImage(ref.read(photoProvider).value!);
+                    .splitImage(ref.read(photoProvider).value!, lengthMatrix);
               },
               child: const Icon(
                 Icons.add,

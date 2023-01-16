@@ -8,13 +8,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
-//   final photoProvider = StateProvider<Uint8List>((ref) {
-//   return Uint8List(0);
-// });
+  final lengthProvider = StateProvider<int>((ref) {
+  return 5;
+});
 
-// final photoProvider = StateNotifierProvider.autoDispose<PhotoProvider, AsyncValue<Uint8List>>((ref){
-//   return PhotoProvider();
-// });
+
 
 final photoProvider =
 AsyncNotifierProvider<PhotoProvider, Uint8List>(() {

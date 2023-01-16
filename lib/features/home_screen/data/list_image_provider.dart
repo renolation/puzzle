@@ -15,16 +15,16 @@ final listImageControllerProvider = StateNotifierProvider.autoDispose<ListImageC
 class ListImageController extends StateNotifier<List<List<Puzzle>>> {
   ListImageController(): super([]);
 
-   splitImage(Uint8List input)  {
+   splitImage(Uint8List input, int length)  {
     img.Image?  image =  cropCenterSquare(img.decodeImage(input));
     int x = 0, y = 0;
-    int width = (image!.width / 3).floor();
-    int height = (image.height / 3).floor();
+    int width = (image!.width / length).floor();
+    int height = (image.height / length).floor();
 
     // split image to parts
     List<img.Image> parts = <img.Image>[];
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
         parts.add(img.copyCrop(image, x: x, y: y, width: width, height: height));
         x += width;
       }
@@ -44,7 +44,7 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
       }
       output.add(puzzle);
      }
-    List<List<Puzzle>> matrix = List.generate(3, (i) => output.sublist(i*3, i*3+3));
+    List<List<Puzzle>> matrix = List.generate(length, (i) => output.sublist(i*length, i*length+length));
 
     state = matrix;
     // return output;
@@ -72,17 +72,13 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
     int x = location[0];
     int y = location[1];
 
-    for (int i = x - 1; i <= x + 1; i++) {
-      for (int j = y - 1; j <= y + 1; j++) {
-        if (i >= 0 && i < 3 && j >= 0 && j < 3) {
-          if (matrix[i][j].isHide) {
-            result.add([i, j]);
-          }
-        }
-      }
-    }
+    if (x > 0 && matrix[x-1][y].isHide)  result.add([x-1, y]);
+    if (x < matrix.length - 1 && matrix[x+1][y].isHide) result.add([x+1, y]);
+    if (y > 0 && matrix[x][y-1].isHide) result.add([x, y-1]);
+    if (y < matrix[0].length - 1 && matrix[x][y+1].isHide) result.add([x, y+1]);
     return result;
   }
+
 
   List<List<Puzzle>>  swapNeighbors(List<List<Puzzle>> matrix, List<int> location1, List<int> location2) {
     int x1 = location1[0];
@@ -101,6 +97,8 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
     List<List<Puzzle>> matrix = [];
     if (neighborsWithValueZero.isNotEmpty) {
       for (var n in neighborsWithValueZero) {
+        print(n);
+
         matrix = swapNeighbors(state, location, n);
         state = [...matrix];
         print('build');
