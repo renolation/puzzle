@@ -45,7 +45,22 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
       output.add(puzzle);
      }
     List<List<Puzzle>> matrix = List.generate(length, (i) => output.sublist(i*length, i*length+length));
+    matrix.shuffle();
+    late int falseRow, falseCol;
 
+    for (int row = 0; row < matrix.length; row++) {
+      for (int col = 0; col < matrix[row].length; col++) {
+        if (matrix[row][col].isHide) {
+          falseRow = row;
+          falseCol = col;
+          break;
+        }
+      }
+    }
+    var falseItem = matrix[falseRow][falseCol];
+    matrix[falseRow][falseCol] =
+    matrix[matrix.length - 1][matrix[matrix.length - 1].length - 1];
+    matrix[matrix.length - 1][matrix[matrix.length - 1].length - 1] = falseItem;
     state = matrix;
     // return output;
   }
