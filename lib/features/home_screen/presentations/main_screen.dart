@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,24 @@ class MainScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final lengthMatrix = ref.watch(lengthProvider);
+
+    Future<List<String>> loadAssets() async {
+      // Load as String
+      final manifestContent =
+      await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
+    // print(manifestContent);
+      // Decode to Map
+      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+        // print(manifestMap);
+      // Filter by path
+      final filtered = manifestMap.keys
+          .where((path) => path.startsWith('assets/photo'))
+          .toList();
+      print(filtered);
+      return filtered;
+
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -30,67 +49,93 @@ class MainScreen extends HookConsumerWidget {
                 Icons.add,
                 color: Colors.red,
               )),
-          // TextButton(
-          //     onPressed: () {
-          //       ref.read(listImageProvider.notifier).state.shuffle();
-          //     },
-          //     child: const Icon(
-          //       Icons.add,
-          //       color: Colors.black,
-          //     )),
+          TextButton(
+              onPressed: () async {
+                await loadAssets();
+                print('a');
+              },
+              child: const Icon(
+                Icons.add,
+                color: Colors.black,
+              )),
         ],
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Image.file(
-          //   File(photoFile),
-          //   height: 300,
-          //   width: 300,
-          // ),
-          Consumer(builder: (context, ref, child) {
-            final photoFile = ref.watch(photoProvider);
-            return photoFile.when(
-                data: (data) {
-                  return Image.memory(data);
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              height: 150,
+              child: Consumer(
+                builder: (context, watch, _) {
+                  final assets = ref.watch(assetsProvider);
+                 return assets.when(
+                     data: (data){
+                       return ListView.builder(
+                         itemCount: data.length,
+                         scrollDirection: Axis.horizontal,
+                         itemBuilder: (context, index){
+                           return GestureDetector(
+                               onTap: () async {
+                                 final bytes = await rootBundle.load(data[index]);
+                                 ref
+                                     .read(listImageControllerProvider.notifier)
+                                     .splitImage(bytes.buffer.asUint8List(), lengthMatrix);
+                               },
+                               child: Image.asset(data[index]));
+                         }
+                       );
+                     },
+                     error: (obj, stackTrade) => Text(stackTrade.toString()),
+                     loading: () => const CircularProgressIndicator());
+
                 },
-                error: (obj, stackTrade) => Text(stackTrade.toString()),
-                loading: () => const CircularProgressIndicator());
-          }),
-          // Text(listImage.length.toString()),
-          Consumer(builder: (context, ref, child) {
-            final listImage = ref.watch(listImageControllerProvider);
-            print('rebuild');
-            return SizedBox(
-                width: 300,
-                height: 300,
-                child: listImage.isEmpty
-                    ? const SizedBox()
-                    : GridView.builder(
-                        itemCount: listImage.length * listImage[0].length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: listImage[0].length,
-                            childAspectRatio: 1,
-                            crossAxisSpacing: 5,
-                            mainAxisSpacing: 5),
-                        itemBuilder: (context, index) {
-                          int row = index ~/ listImage[0].length;
-                          int col = index % listImage[0].length;
-                          return GestureDetector(
-                            onTap: () {
-                              ref
-                                  .read(listImageControllerProvider.notifier)
-                                  .swapNeighborsWithValueZero([row, col]);
-                            },
-                            child: Container(
-                                color: Colors.transparent,
-                                // child: Text('${listImage[index]}'));
-                                child: Image.memory(
-                                    listImage[row][col].unit8List!)),
-                          );
-                        }));
-          }),
-        ],
+              ),
+            ),
+            // Consumer(builder: (context, ref, child) {
+            //   final photoFile = ref.watch(photoProvider);
+            //   return photoFile.when(
+            //       data: (data) {
+            //         return Image.memory(data);
+            //       },
+            //       error: (obj, stackTrade) => Text(stackTrade.toString()),
+            //       loading: () => const CircularProgressIndicator());
+            // }),
+            // Text(listImage.length.toString()),
+            Consumer(builder: (context, ref, child) {
+              final listImage = ref.watch(listImageControllerProvider);
+              print('rebuild');
+              return SizedBox(
+                  width: 300,
+                  height: 300,
+                  child: listImage.isEmpty
+                      ? const SizedBox()
+                      : GridView.builder(
+                          itemCount: listImage.length * listImage[0].length,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: listImage[0].length,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5),
+                          itemBuilder: (context, index) {
+                            int row = index ~/ listImage[0].length;
+                            int col = index % listImage[0].length;
+                            return GestureDetector(
+                              onTap: () {
+                                ref
+                                    .read(listImageControllerProvider.notifier)
+                                    .swapNeighborsWithValueZero([row, col]);
+                              },
+                              child: Container(
+                                  color: Colors.transparent,
+                                  // child: Text('${listImage[index]}'));
+                                  child: Image.memory(
+                                      listImage[row][col].unit8List!)),
+                            );
+                          }));
+            }),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: () async {
         final ImagePicker _picker = ImagePicker();

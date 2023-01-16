@@ -1,6 +1,7 @@
 
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -12,7 +13,16 @@ import 'package:path_provider/path_provider.dart';
   return 5;
 });
 
+final assetsProvider = FutureProvider((ref) async {
+  final assetBundle = rootBundle;
+  final assetListing = await assetBundle.loadString('AssetManifest.json');
 
+  final Map<String, dynamic> manifestMap = json.decode(assetListing);
+  final assets = manifestMap.keys
+      .where((path) => path.startsWith('assets/photo'))
+      .toList();
+  return assets;
+});
 
 final photoProvider =
 AsyncNotifierProvider<PhotoProvider, Uint8List>(() {
@@ -27,6 +37,7 @@ class PhotoProvider extends AsyncNotifier<Uint8List> {
     await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
     return file.readAsBytesSync();
   }
+
 
   @override
   Future<Uint8List> build() async {
