@@ -16,6 +16,8 @@ final selectingProvider = StateProvider<int>((ref) {
   return 0;
 });
 
+final moveProvider = StateProvider<int>((ref) => 0);
+
 
 
 final assetsProvider = FutureProvider((ref) async {

@@ -92,22 +92,17 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
     return matrix;
   }
 
-  void swapNeighborsWithValueZero(List<int> location) {
+  List<List<int>> swapNeighborsWithValueZero(List<int> location) {
     List<List<int>> neighborsWithValueZero = detectNeighbors(state, location);
-    List<List<Puzzle>> matrix = [];
-    if (neighborsWithValueZero.isNotEmpty) {
-      for (var n in neighborsWithValueZero) {
-        print(n);
-
-        matrix = swapNeighbors(state, location, n);
-        state = [...matrix];
-        print('build');
-      }
-    } else {
-      print('wrong');
-    }
-
+    return neighborsWithValueZero;
   }
-
+  void swap(List<List<int>> neighborsWithValueZero, List<int> location ){
+    List<List<Puzzle>> matrix = [];
+    for (var n in neighborsWithValueZero) {
+      matrix = swapNeighbors(state, location, n);
+      state = [...matrix];
+      print('build');
+    }
+  }
 
 }

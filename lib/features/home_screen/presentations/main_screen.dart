@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:reno_puzzle/features/home_screen/data/list_image_provider.dart';
 
 import '../data/home_provider.dart';
+import '../domains/puzzle.dart';
 
 class MainScreen extends HookConsumerWidget {
   const MainScreen({
@@ -46,15 +47,7 @@ class MainScreen extends HookConsumerWidget {
           //       Icons.add,
           //       color: Colors.red,
           //     )),
-          TextButton(
-              onPressed: () async {
-                await loadAssets();
-                print('a');
-              },
-              child: const Icon(
-                Icons.add,
-                color: Colors.black,
-              )),
+
         ],
       ),
       body: SingleChildScrollView(
@@ -66,7 +59,6 @@ class MainScreen extends HookConsumerWidget {
               child: Consumer(
                 builder: (context, watch, _) {
                   final lengthMatrix = ref.watch(lengthProvider);
-
                   final assets = ref.watch(assetsProvider);
                   return assets.when(
                       data: (data) {
@@ -101,27 +93,21 @@ class MainScreen extends HookConsumerWidget {
                 },
               ),
             ),
-            // Consumer(builder: (context, ref, child) {
-            //   final photoFile = ref.watch(photoProvider);
-            //   return photoFile.when(
-            //       data: (data) {
-            //         return Image.memory(data);
-            //       },
-            //       error: (obj, stackTrade) => Text(stackTrade.toString()),
-            //       loading: () => const CircularProgressIndicator());
-            // }),
-            // Text(listImage.length.toString()),
+
             const SizedBox(
               height: 10,
             ),
             Consumer(builder: (context, ref, child) {
               final listImage = ref.watch(listImageControllerProvider);
-              print('rebuild');
               return SizedBox(
                   width: 300,
                   height: 300,
                   child: listImage.isEmpty
-                      ? const SizedBox()
+                      ? const SizedBox.expand(
+                    child: Center(
+                      child: Text('select'),
+                    ),
+                  )
                       : GridView.builder(
                           itemCount: listImage.length * listImage[0].length,
                           gridDelegate:
@@ -135,9 +121,19 @@ class MainScreen extends HookConsumerWidget {
                             int col = index % listImage[0].length;
                             return GestureDetector(
                               onTap: () {
-                                ref
+                                
+                                final neighborsWithValueZero = ref
                                     .read(listImageControllerProvider.notifier)
                                     .swapNeighborsWithValueZero([row, col]);
+
+                                if (neighborsWithValueZero.isNotEmpty) {
+                                  ref.read(moveProvider.notifier).state +=1;
+                                  ref
+                                      .read(listImageControllerProvider.notifier)
+                                      .swap(neighborsWithValueZero ,[row, col]);
+                                } else {
+                                  print('wrong');
+                                }
                               },
                               child: Container(
                                   color: Colors.transparent,
@@ -188,6 +184,10 @@ class MainScreen extends HookConsumerWidget {
                   ],
                 ),
               );
+            }),
+            Consumer(builder: (context, ref, child){
+              final move = ref.watch(moveProvider);
+              return Text('$move');
             }),
           ],
         ),
