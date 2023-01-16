@@ -17,38 +17,35 @@ class MainScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lengthMatrix = ref.watch(lengthProvider);
-
     Future<List<String>> loadAssets() async {
       // Load as String
       final manifestContent =
-      await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
-    // print(manifestContent);
+          await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
+      // print(manifestContent);
       // Decode to Map
       final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-        // print(manifestMap);
+      // print(manifestMap);
       // Filter by path
       final filtered = manifestMap.keys
           .where((path) => path.startsWith('assets/photo'))
           .toList();
       print(filtered);
       return filtered;
-
     }
 
     return Scaffold(
       appBar: AppBar(
         actions: [
-          TextButton(
-              onPressed: () {
-                ref
-                    .read(listImageControllerProvider.notifier)
-                    .splitImage(ref.read(photoProvider).value!, lengthMatrix);
-              },
-              child: const Icon(
-                Icons.add,
-                color: Colors.red,
-              )),
+          // TextButton(
+          //     onPressed: () {
+          //       ref
+          //           .read(listImageControllerProvider.notifier)
+          //           .splitImage(ref.read(photoProvider).value!, lengthMatrix);
+          //     },
+          //     child: const Icon(
+          //       Icons.add,
+          //       color: Colors.red,
+          //     )),
           TextButton(
               onPressed: () async {
                 await loadAssets();
@@ -64,31 +61,43 @@ class MainScreen extends HookConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
+            SizedBox(
               height: 150,
               child: Consumer(
                 builder: (context, watch, _) {
-                  final assets = ref.watch(assetsProvider);
-                 return assets.when(
-                     data: (data){
-                       return ListView.builder(
-                         itemCount: data.length,
-                         scrollDirection: Axis.horizontal,
-                         itemBuilder: (context, index){
-                           return GestureDetector(
-                               onTap: () async {
-                                 final bytes = await rootBundle.load(data[index]);
-                                 ref
-                                     .read(listImageControllerProvider.notifier)
-                                     .splitImage(bytes.buffer.asUint8List(), lengthMatrix);
-                               },
-                               child: Image.asset(data[index]));
-                         }
-                       );
-                     },
-                     error: (obj, stackTrade) => Text(stackTrade.toString()),
-                     loading: () => const CircularProgressIndicator());
+                  final lengthMatrix = ref.watch(lengthProvider);
 
+                  final assets = ref.watch(assetsProvider);
+                  return assets.when(
+                      data: (data) {
+                        return ListView.builder(
+                            itemCount: data.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () async {
+                                  ref.read(selectingProvider.notifier).state = index;
+                                  final bytes =
+                                      await rootBundle.load(data[index]);
+                                  ref
+                                      .read(
+                                          listImageControllerProvider.notifier)
+                                      .splitImage(bytes.buffer.asUint8List(),
+                                          lengthMatrix);
+                                },
+                                child: SizedBox(
+                                  height: 150,
+                                  width: 150,
+                                  child: Image.asset(
+                                    data[index],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            });
+                      },
+                      error: (obj, stackTrade) => Text(stackTrade.toString()),
+                      loading: () => const CircularProgressIndicator());
                 },
               ),
             ),
@@ -102,6 +111,9 @@ class MainScreen extends HookConsumerWidget {
             //       loading: () => const CircularProgressIndicator());
             // }),
             // Text(listImage.length.toString()),
+            const SizedBox(
+              height: 10,
+            ),
             Consumer(builder: (context, ref, child) {
               final listImage = ref.watch(listImageControllerProvider);
               print('rebuild');
@@ -112,11 +124,12 @@ class MainScreen extends HookConsumerWidget {
                       ? const SizedBox()
                       : GridView.builder(
                           itemCount: listImage.length * listImage[0].length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: listImage[0].length,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: listImage[0].length,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5),
                           itemBuilder: (context, index) {
                             int row = index ~/ listImage[0].length;
                             int col = index % listImage[0].length;
@@ -133,6 +146,48 @@ class MainScreen extends HookConsumerWidget {
                                       listImage[row][col].unit8List!)),
                             );
                           }));
+            }),
+            Consumer(builder: (context, ref, child) {
+              final lengthMatrix = ref.watch(lengthProvider);
+              final selectingIndex = ref.watch(selectingProvider);
+              final assets = ref.watch(assetsProvider);
+              return SizedBox(
+                // height: 70,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Slider(
+                        value: lengthMatrix.toDouble(),
+                        min: 2,
+                        max: 10,
+                        onChanged: (value) {
+                          ref.read(lengthProvider.notifier).state = value.toInt();
+                        }),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(lengthMatrix.toString()),
+                        TextButton(
+                          onPressed: () async {
+
+                            final bytes =
+                                await rootBundle.load(assets.value![selectingIndex]);
+                            ref
+                                .read(
+                                listImageControllerProvider.notifier)
+                                .splitImage(bytes.buffer.asUint8List(),
+                                lengthMatrix);
+
+                          },
+                          child: const Text('ok'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
             }),
           ],
         ),

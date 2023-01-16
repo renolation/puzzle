@@ -12,6 +12,11 @@ import 'package:path_provider/path_provider.dart';
   final lengthProvider = StateProvider<int>((ref) {
   return 5;
 });
+final selectingProvider = StateProvider<int>((ref) {
+  return 0;
+});
+
+
 
 final assetsProvider = FutureProvider((ref) async {
   final assetBundle = rootBundle;
@@ -23,6 +28,7 @@ final assetsProvider = FutureProvider((ref) async {
       .toList();
   return assets;
 });
+
 
 final photoProvider =
 AsyncNotifierProvider<PhotoProvider, Uint8List>(() {
