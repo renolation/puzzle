@@ -121,14 +121,13 @@ class MainScreen extends HookConsumerWidget {
                             int col = index % listImage[0].length;
                             return GestureDetector(
                               onTap: () {
-
                                 final neighborsWithValueZero = ref
                                     .read(listImageControllerProvider.notifier)
                                     .swapNeighborsWithValueZero([row, col]);
 
                                 if (neighborsWithValueZero.isNotEmpty) {
-
-                                  if(ref.read(moveProvider.notifier).state == 0){
+                                  if (ref.read(moveProvider.notifier).state ==
+                                      0) {
                                     ref.read(timerProvider.notifier).start();
                                   }
 
@@ -137,6 +136,9 @@ class MainScreen extends HookConsumerWidget {
                                       .read(
                                           listImageControllerProvider.notifier)
                                       .swap(neighborsWithValueZero, [row, col]);
+                                  if(ref.read(listImageControllerProvider.notifier).detectSuccess()){
+                                    print('success');
+                                  }
                                 } else {
                                   print('wrong');
                                 }
@@ -144,8 +146,14 @@ class MainScreen extends HookConsumerWidget {
                               child: Container(
                                   color: Colors.transparent,
                                   // child: Text('${listImage[index]}'));
-                                  child: Image.memory(
-                                      listImage[row][col].unit8List!)),
+                                  child: Stack(
+                                    children: [
+                                      Image.memory(
+                                          listImage[row][col].unit8List!),
+                                      Text(
+                                          listImage[row][col].index.toString()),
+                                    ],
+                                  )),
                             );
                           }));
             }),

@@ -119,5 +119,16 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
       print('build');
     }
   }
-
+  bool detectSuccess(){
+    // List<Puzzle> flatList = List.generate(state.length, (i) => state[i]).expand((i) => i).toList();
+    List<Puzzle> flatList = state.expand((element) => element).toList();
+    bool isIncreasing = true;
+    for (int i = 1; i < flatList.length; i++) {
+      if (flatList[i].index < flatList[i - 1].index) {
+        isIncreasing = false;
+        break;
+      }
+    }
+    return isIncreasing;
+  }
 }
