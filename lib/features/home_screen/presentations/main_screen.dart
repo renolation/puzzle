@@ -121,11 +121,17 @@ class MainScreen extends HookConsumerWidget {
                             int col = index % listImage[0].length;
                             return GestureDetector(
                               onTap: () {
+
                                 final neighborsWithValueZero = ref
                                     .read(listImageControllerProvider.notifier)
                                     .swapNeighborsWithValueZero([row, col]);
 
                                 if (neighborsWithValueZero.isNotEmpty) {
+
+                                  if(ref.read(moveProvider.notifier).state == 0){
+                                    ref.read(timerProvider.notifier).start();
+                                  }
+
                                   ref.read(moveProvider.notifier).state += 1;
                                   ref
                                       .read(
