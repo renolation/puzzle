@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:reno_puzzle/providers.dart';
+import 'package:reno_puzzle/features/home_screen/data/list_image_provider.dart';
+
+import '../data/home_provider.dart';
 
 class MainScreen extends HookConsumerWidget {
   const MainScreen({
@@ -14,7 +16,6 @@ class MainScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final photoFile = ref.watch(photoProvider);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -22,7 +23,7 @@ class MainScreen extends HookConsumerWidget {
               onPressed: () {
                 ref
                     .read(listImageControllerProvider.notifier)
-                    .splitImage(File(photoFile).readAsBytesSync());
+                    .splitImage(ref.read(photoProvider).value!);
               },
               child: const Icon(
                 Icons.add,
@@ -41,11 +42,20 @@ class MainScreen extends HookConsumerWidget {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Image.file(
-            File(photoFile),
-            height: 300,
-            width: 300,
-          ),
+          // Image.file(
+          //   File(photoFile),
+          //   height: 300,
+          //   width: 300,
+          // ),
+          Consumer(builder: (context, ref, child) {
+            final photoFile = ref.watch(photoProvider);
+            return photoFile.when(
+                data: (data) {
+                  return Image.memory(data);
+                },
+                error: (obj, stackTrade) => Text(stackTrade.toString()),
+                loading: () => const CircularProgressIndicator());
+          }),
           // Text(listImage.length.toString()),
           Consumer(builder: (context, ref, child) {
             final listImage = ref.watch(listImageControllerProvider);
@@ -85,7 +95,10 @@ class MainScreen extends HookConsumerWidget {
         final ImagePicker _picker = ImagePicker();
         final XFile? image =
             await _picker.pickImage(source: ImageSource.gallery);
-        ref.read(photoProvider.notifier).state = image!.path;
+        File newFile = File(image!.path);
+        ref
+            .read(photoProvider.notifier)
+            .updateUint8List(newFile.readAsBytesSync());
       }),
     );
   }

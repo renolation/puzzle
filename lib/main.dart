@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reno_puzzle/main_screen.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:reno_puzzle/features/home_screen/presentations/main_screen.dart';
+
+import 'features/home_screen/data/home_provider.dart';
 
 void main() {
   runApp(

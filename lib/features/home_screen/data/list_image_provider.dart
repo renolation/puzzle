@@ -4,12 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:flutter/services.dart';
 
-import 'models/puzzle.dart';
+import '../domains/puzzle.dart';
 
 
-final photoProvider = StateProvider<String>((ref) => '');
-
-// final listImageProvider = StateProvider<List<Image>>((ref) => []);
 
 final listImageControllerProvider = StateNotifierProvider.autoDispose<ListImageController, List<List<Puzzle>>>((ref){
   return ListImageController();
@@ -18,8 +15,8 @@ final listImageControllerProvider = StateNotifierProvider.autoDispose<ListImageC
 class ListImageController extends StateNotifier<List<List<Puzzle>>> {
   ListImageController(): super([]);
 
-   splitImage(List<int> input)  {
-    img.Image?  image =  cropCenterSquare(img.decodeImage(Uint8List.fromList(input)));
+   splitImage(Uint8List input)  {
+    img.Image?  image =  cropCenterSquare(img.decodeImage(input));
     int x = 0, y = 0;
     int width = (image!.width / 3).floor();
     int height = (image.height / 3).floor();
