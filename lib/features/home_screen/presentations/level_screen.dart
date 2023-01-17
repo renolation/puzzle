@@ -11,10 +11,12 @@ class LevelScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final difficulty = ref.watch(difficultyProvider);
     return Container(
         child: Column(
           children: [
             Text('level'),
+            Text('$difficulty'),
             Row(
               children: [
                 InkWell(

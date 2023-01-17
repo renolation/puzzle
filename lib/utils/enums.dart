@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 
 enum HomeScreenState { main, difficulty, level }
 
+enum Difficulty {
+  easy('Easy'),
+  medium('Medium'),
+  hard('Hard');
+
+  const Difficulty(this.name);
+  final String name;
+}
 
 
 extension HexColor on Color {

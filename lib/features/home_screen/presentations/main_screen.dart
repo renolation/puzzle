@@ -16,6 +16,7 @@ class MainScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('main'),
         Row(
@@ -27,7 +28,12 @@ class MainScreen extends HookConsumerWidget {
               child: Icon(Icons.arrow_right),
             ),
           ],
-        )
+        ),
+        TextButton(onPressed: (){
+          ref
+              .read(homeScreenTypeProvider.notifier)
+              .update((state) => HomeScreenState.difficulty);
+        }, child: Text('play')),
       ],
     ));
   }
