@@ -20,6 +20,7 @@ Levels _$LevelsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Levels {
+  int get difficulty => throw _privateConstructorUsedError;
   int get level => throw _privateConstructorUsedError;
   int get step => throw _privateConstructorUsedError;
   int get time => throw _privateConstructorUsedError;
@@ -36,7 +37,13 @@ abstract class $LevelsCopyWith<$Res> {
   factory $LevelsCopyWith(Levels value, $Res Function(Levels) then) =
       _$LevelsCopyWithImpl<$Res, Levels>;
   @useResult
-  $Res call({int level, int step, int time, int? remainTime, int finish});
+  $Res call(
+      {int difficulty,
+      int level,
+      int step,
+      int time,
+      int? remainTime,
+      int finish});
 }
 
 /// @nodoc
@@ -52,6 +59,7 @@ class _$LevelsCopyWithImpl<$Res, $Val extends Levels>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? difficulty = null,
     Object? level = null,
     Object? step = null,
     Object? time = null,
@@ -59,6 +67,10 @@ class _$LevelsCopyWithImpl<$Res, $Val extends Levels>
     Object? finish = null,
   }) {
     return _then(_value.copyWith(
+      difficulty: null == difficulty
+          ? _value.difficulty
+          : difficulty // ignore: cast_nullable_to_non_nullable
+              as int,
       level: null == level
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
@@ -89,7 +101,13 @@ abstract class _$$_LevelsCopyWith<$Res> implements $LevelsCopyWith<$Res> {
       __$$_LevelsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int level, int step, int time, int? remainTime, int finish});
+  $Res call(
+      {int difficulty,
+      int level,
+      int step,
+      int time,
+      int? remainTime,
+      int finish});
 }
 
 /// @nodoc
@@ -102,6 +120,7 @@ class __$$_LevelsCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? difficulty = null,
     Object? level = null,
     Object? step = null,
     Object? time = null,
@@ -109,6 +128,10 @@ class __$$_LevelsCopyWithImpl<$Res>
     Object? finish = null,
   }) {
     return _then(_$_Levels(
+      difficulty: null == difficulty
+          ? _value.difficulty
+          : difficulty // ignore: cast_nullable_to_non_nullable
+              as int,
       level: null == level
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
@@ -138,7 +161,8 @@ class __$$_LevelsCopyWithImpl<$Res>
 @Entity(realClass: Levels)
 class _$_Levels implements _Levels {
   _$_Levels(
-      {required this.level,
+      {required this.difficulty,
+      required this.level,
       required this.step,
       required this.time,
       this.remainTime,
@@ -147,6 +171,8 @@ class _$_Levels implements _Levels {
   factory _$_Levels.fromJson(Map<String, dynamic> json) =>
       _$$_LevelsFromJson(json);
 
+  @override
+  final int difficulty;
   @override
   final int level;
   @override
@@ -161,7 +187,7 @@ class _$_Levels implements _Levels {
 
   @override
   String toString() {
-    return 'Levels(level: $level, step: $step, time: $time, remainTime: $remainTime, finish: $finish)';
+    return 'Levels(difficulty: $difficulty, level: $level, step: $step, time: $time, remainTime: $remainTime, finish: $finish)';
   }
 
   @override
@@ -169,6 +195,8 @@ class _$_Levels implements _Levels {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Levels &&
+            (identical(other.difficulty, difficulty) ||
+                other.difficulty == difficulty) &&
             (identical(other.level, level) || other.level == level) &&
             (identical(other.step, step) || other.step == step) &&
             (identical(other.time, time) || other.time == time) &&
@@ -179,8 +207,8 @@ class _$_Levels implements _Levels {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, level, step, time, remainTime, finish);
+  int get hashCode => Object.hash(
+      runtimeType, difficulty, level, step, time, remainTime, finish);
 
   @JsonKey(ignore: true)
   @override
@@ -198,7 +226,8 @@ class _$_Levels implements _Levels {
 
 abstract class _Levels implements Levels {
   factory _Levels(
-      {required final int level,
+      {required final int difficulty,
+      required final int level,
       required final int step,
       required final int time,
       final int? remainTime,
@@ -206,6 +235,8 @@ abstract class _Levels implements Levels {
 
   factory _Levels.fromJson(Map<String, dynamic> json) = _$_Levels.fromJson;
 
+  @override
+  int get difficulty;
   @override
   int get level;
   @override

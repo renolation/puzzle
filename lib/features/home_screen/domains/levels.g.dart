@@ -7,6 +7,7 @@ part of 'levels.dart';
 // **************************************************************************
 
 _$_Levels _$$_LevelsFromJson(Map<String, dynamic> json) => _$_Levels(
+      difficulty: json['difficulty'] as int,
       level: json['level'] as int,
       step: json['step'] as int,
       time: json['time'] as int,
@@ -15,6 +16,7 @@ _$_Levels _$$_LevelsFromJson(Map<String, dynamic> json) => _$_Levels(
     );
 
 Map<String, dynamic> _$$_LevelsToJson(_$_Levels instance) => <String, dynamic>{
+      'difficulty': instance.difficulty,
       'level': instance.level,
       'step': instance.step,
       'time': instance.time,

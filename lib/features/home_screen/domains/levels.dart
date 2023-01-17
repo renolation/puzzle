@@ -8,6 +8,7 @@ part 'levels.g.dart';
 class Levels with _$Levels {
   @Entity(realClass: Levels)
   factory Levels({
+    required int difficulty,
     required int level,
     required int step,
     required int time,
