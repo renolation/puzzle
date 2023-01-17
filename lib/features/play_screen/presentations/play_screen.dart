@@ -6,14 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-import 'package:reno_puzzle/features/home_screen/data/list_image_provider.dart';
 
 import '../data/home_provider.dart';
+import '../data/list_image_provider.dart';
 import '../data/timer_provider.dart';
 import '../domains/puzzle.dart';
 
-class MainScreen extends HookConsumerWidget {
-  const MainScreen({
+class PlayScreen extends HookConsumerWidget {
+  const PlayScreen({
     Key? key,
   }) : super(key: key);
 

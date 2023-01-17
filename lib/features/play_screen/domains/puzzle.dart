@@ -4,7 +4,8 @@
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:image/image.dart';
-import 'package:reno_puzzle/features/home_screen/domains/uint8list_converter.dart';
+
+import 'uint8list_converter.dart';
 part 'puzzle.freezed.dart';
 part 'puzzle.g.dart';
 
