@@ -122,6 +122,7 @@ class PlayScreen extends HookConsumerWidget {
                                     ref.read(timerProvider.notifier).start();
                                   }
 
+
                                   ref.read(moveProvider.notifier).state += 1;
                                   ref
                                       .read(
@@ -198,16 +199,6 @@ class PlayScreen extends HookConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(secondsToMinutes(timer)),
-                  // TextButton(
-                  //     onPressed: () {
-                  //       ref.read(timerProvider.notifier).start();
-                  //     },
-                  //     child: const Text('start')),
-                  // TextButton(
-                  //     onPressed: () {
-                  //       ref.read(timerProvider.notifier).stop();
-                  //     },
-                  //     child: const Text('stop')),
                 ],
               );
             }),

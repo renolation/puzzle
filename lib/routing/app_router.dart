@@ -30,18 +30,21 @@ final goRouterProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
           child: const HomeScreen(),
         ),
+        routes: [
+          GoRoute(
+              path: 'play',
+              name: AppRoute.play.name,
+              pageBuilder: (context, state) {
+                final levels = state.extra as Levels;
+                return MaterialPage(
+                  key: state.pageKey,
+                  child:  PlayScreen(levels: levels,),
+                );
+              }
+          ),
+        ]
       ),
-      GoRoute(
-        path: '/play',
-        name: AppRoute.play.name,
-        pageBuilder: (context, state) {
-          final levels = state.extra as Levels;
-          return MaterialPage(
-            key: state.pageKey,
-            child:  PlayScreen(levels: levels,),
-          );
-        }
-      ),
+
       //creator
     ],
   );
