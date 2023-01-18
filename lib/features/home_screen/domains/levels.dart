@@ -1,13 +1,18 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:objectbox/objectbox.dart';
+import 'package:isar/isar.dart';
 
-part 'levels.freezed.dart';
 part 'levels.g.dart';
+part 'levels.freezed.dart';
+
+mixin IsarId {
+  Id? get isarId;
+}
 
 @freezed
-class Levels with _$Levels {
-  @Entity(realClass: Levels)
-  factory Levels({
+@Collection(accessor:'LevelsSchema',ignore: {'copyWith', 'id'})
+class Levels with _$Levels, IsarId {
+  const factory Levels({
+    int? id,
     required int difficulty,
     required int level,
     required int step,
@@ -19,6 +24,11 @@ class Levels with _$Levels {
 
 
 }) = _Levels;
+
+  const Levels._();
+
+  @override
+  Id? get isarId => id;
 
   factory Levels.fromJson(Map<String, dynamic> json) =>
       _$LevelsFromJson(json);

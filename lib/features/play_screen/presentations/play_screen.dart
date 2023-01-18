@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:isar/isar.dart';
+import '../../../providers/providers.dart';
 import '../../home_screen/domains/levels.dart';
 import '../data/home_provider.dart';
 import '../data/list_image_provider.dart';
@@ -23,17 +25,12 @@ class PlayScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    useMemoized(
+      () {
+        ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
 
-    useMemoized(()
-    {
-      ref
-          .read(
-          listImageControllerProvider.notifier)
-          .convertAsset(levels.pathAsset,
-          levels.matrix);
-
-      return null;
-    },
+        return null;
+      },
       [],
     );
 
@@ -85,6 +82,14 @@ class PlayScreen extends HookConsumerWidget {
             //     },
             //   ),
             // ),
+          SizedBox(
+                                height: 250,
+                                width: 250,
+                                child: Image.asset(
+                                  levels.pathAsset,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
             const SizedBox(
               height: 10,
             ),
@@ -101,12 +106,11 @@ class PlayScreen extends HookConsumerWidget {
                         )
                       : GridView.builder(
                           itemCount: listImage.length * listImage[0].length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: listImage[0].length,
-                                  childAspectRatio: 1,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 5),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: listImage[0].length,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5),
                           itemBuilder: (context, index) {
                             int row = index ~/ listImage[0].length;
                             int col = index % listImage[0].length;
@@ -117,18 +121,15 @@ class PlayScreen extends HookConsumerWidget {
                                     .swapNeighborsWithValueZero([row, col]);
 
                                 if (neighborsWithValueZero.isNotEmpty) {
-                                  if (ref.read(moveProvider.notifier).state ==
-                                      0) {
+                                  if (ref.read(moveProvider.notifier).state == 0) {
                                     ref.read(timerProvider.notifier).start();
                                   }
 
-
                                   ref.read(moveProvider.notifier).state += 1;
                                   ref
-                                      .read(
-                                          listImageControllerProvider.notifier)
+                                      .read(listImageControllerProvider.notifier)
                                       .swap(neighborsWithValueZero, [row, col]);
-                                  if(ref.read(listImageControllerProvider.notifier).detectSuccess()){
+                                  if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
                                     print('success');
                                   }
                                 } else {
@@ -140,10 +141,8 @@ class PlayScreen extends HookConsumerWidget {
                                   // child: Text('${listImage[index]}'));
                                   child: Stack(
                                     children: [
-                                      Image.memory(
-                                          listImage[row][col].unit8List!),
-                                      Text(
-                                          listImage[row][col].index.toString()),
+                                      Image.memory(listImage[row][col].unit8List!),
+                                      Text(listImage[row][col].index.toString()),
                                     ],
                                   )),
                             );
@@ -202,6 +201,14 @@ class PlayScreen extends HookConsumerWidget {
                 ],
               );
             }),
+            TextButton(onPressed: () async {
+              final isar = await Isar.open([LevelsSchema]);
+
+              await isar.writeTxn(() async {
+                await isar.LevelsSchema.put(levels);
+              });
+
+            }, child: Text('add')),
           ],
         ),
       ),

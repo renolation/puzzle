@@ -10,8 +10,7 @@ StateNotifierProvider.autoDispose<LevelsController, List<Levels>>((ref) {
 });
 
 class LevelsController extends StateNotifier<List<Levels>> {
-  
-  
+
   LevelsController({required this.levelsRepository}) : super([]){
     getLocalLevels();
   }

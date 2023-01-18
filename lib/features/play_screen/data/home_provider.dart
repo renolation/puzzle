@@ -9,14 +9,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
-  final lengthProvider = StateProvider.autoDispose<int>((ref) {
-  return 4;
-});
-final selectingProvider = StateProvider.autoDispose<int>((ref) {
-  return 0;
-});
-
-final moveProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 
 

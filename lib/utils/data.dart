@@ -1,7 +1,7 @@
 import '../features/home_screen/domains/levels.dart';
 
 final List<Levels> listLevels = [
-  Levels(
+  const Levels(
     difficulty: 1,
     level: 1,
     step: 0,
