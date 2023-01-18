@@ -5,19 +5,18 @@ class IsarManager {
   const IsarManager(this.isar);
 
   final Isar isar;
+  void test(){}
 
-  // Future<List<Levels>> watchLatestVersion() async* {
-  //   final query = isar.LevelsSchema.where().build();
-  //
-  //   await for (final results in query.watch(fireImmediately: true)) {
-  //     if (results.isNotEmpty) {
-  //       yield results.first;
-  //     }
-  //   }
-  // }
   Future<List<Levels>> getListDB() async {
-    final query = isar.LevelsSchema.where().findAll();
+    final query = await isar.LevelsSchema.where().findAll();
+    print('query ${query}');
     return query;
+  }
 
+  Future<void> insertLevels(Levels levels) async {
+    print((levels.toString()));
+    await isar.writeTxn(() async {
+      await isar.LevelsSchema.put(levels);
+    });
   }
 }

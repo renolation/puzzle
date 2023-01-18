@@ -46,7 +46,10 @@ class LevelScreen extends HookConsumerWidget {
                               AppRoute.play.name,
                           extra: data[index]);
                         },
-                        child: Text(' ${data[index].difficulty} : ${data[index].level}'));
+                        child: Container(
+                            height: 40,
+                            color: data[index].finish == 0 ? Colors.red : Colors.blue,
+                            child: Text(' ${data[index].difficulty} : ${data[index].level}: ${data[index].finish}')));
                     }
                 );
               }),

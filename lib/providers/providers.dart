@@ -21,14 +21,15 @@ final selectingProvider = StateProvider.autoDispose<int>((ref) {
 final moveProvider = StateProvider.autoDispose<int>((ref) => 0);
 
 
-final isarPod = FutureProvider((ref) async {
-  final dir = await getApplicationDocumentsDirectory();
-  return Isar.open([LevelsSchema], directory: dir.path);
+
+
+final isarManagerPod = Provider((ref)  {
+  final isar = ref.watch(isarProvider);
+  return IsarManager(isar);
 });
 
-final isarManagerPod = FutureProvider((ref) async {
-  final isar = await ref.watch(isarPod.future);
-  return IsarManager(isar);
+final isarProvider = Provider<Isar>((ref) {
+  throw UnimplementedError();
 });
 
 
