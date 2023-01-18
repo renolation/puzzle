@@ -6,7 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
-
+import 'package:flutter_hooks/flutter_hooks.dart';
+import '../../home_screen/domains/levels.dart';
 import '../data/home_provider.dart';
 import '../data/list_image_provider.dart';
 import '../data/timer_provider.dart';
@@ -15,85 +16,75 @@ import '../domains/puzzle.dart';
 class PlayScreen extends HookConsumerWidget {
   const PlayScreen({
     Key? key,
+    required this.levels,
   }) : super(key: key);
+
+  final Levels levels;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<List<String>> loadAssets() async {
-      // Load as String
-      final manifestContent =
-          await DefaultAssetBundle.of(context).loadString('AssetManifest.json');
-      // print(manifestContent);
-      // Decode to Map
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-      // print(manifestMap);
-      // Filter by path
-      final filtered = manifestMap.keys
-          .where((path) => path.startsWith('assets/photo'))
-          .toList();
-      print(filtered);
-      return filtered;
-    }
+
+    useMemoized(()
+    {
+      ref
+          .read(
+          listImageControllerProvider.notifier)
+          .convertAsset(levels.pathAsset,
+          levels.matrix);
+
+      return null;
+    },
+      [],
+    );
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          // TextButton(
-          //     onPressed: () {
-          //       ref
-          //           .read(listImageControllerProvider.notifier)
-          //           .splitImage(ref.read(photoProvider).value!, lengthMatrix);
-          //     },
-          //     child: const Icon(
-          //       Icons.add,
-          //       color: Colors.red,
-          //     )),
-        ],
+        title: Text('asdasd'),
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              height: 150,
-              child: Consumer(
-                builder: (context, watch, _) {
-                  final lengthMatrix = ref.watch(lengthProvider);
-                  final assets = ref.watch(assetsProvider);
-                  return assets.when(
-                      data: (data) {
-                        return ListView.builder(
-                            itemCount: data.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () async {
-                                  ref.read(selectingProvider.notifier).state =
-                                      index;
-                                  final bytes =
-                                      await rootBundle.load(data[index]);
-                                  ref
-                                      .read(
-                                          listImageControllerProvider.notifier)
-                                      .splitImage(bytes.buffer.asUint8List(),
-                                          lengthMatrix);
-                                },
-                                child: SizedBox(
-                                  height: 150,
-                                  width: 150,
-                                  child: Image.asset(
-                                    data[index],
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              );
-                            });
-                      },
-                      error: (obj, stackTrade) => Text(stackTrade.toString()),
-                      loading: () => const CircularProgressIndicator());
-                },
-              ),
-            ),
+            // SizedBox(
+            //   height: 150,
+            //   child: Consumer(
+            //     builder: (context, watch, _) {
+            //       final lengthMatrix = ref.watch(lengthProvider);
+            //       final assets = ref.watch(assetsProvider);
+            //       return assets.when(
+            //           data: (data) {
+            //             return ListView.builder(
+            //                 itemCount: data.length,
+            //                 scrollDirection: Axis.horizontal,
+            //                 itemBuilder: (context, index) {
+            //                   return GestureDetector(
+            //                     onTap: () async {
+            //                       ref.read(selectingProvider.notifier).state =
+            //                           index;
+            //                       final bytes =
+            //                           await rootBundle.load(data[index]);
+            //                       ref
+            //                           .read(
+            //                               listImageControllerProvider.notifier)
+            //                           .splitImage(bytes.buffer.asUint8List(),
+            //                               lengthMatrix);
+            //                     },
+            //                     child: SizedBox(
+            //                       height: 150,
+            //                       width: 150,
+            //                       child: Image.asset(
+            //                         data[index],
+            //                         fit: BoxFit.cover,
+            //                       ),
+            //                     ),
+            //                   );
+            //                 });
+            //           },
+            //           error: (obj, stackTrade) => Text(stackTrade.toString()),
+            //           loading: () => const CircularProgressIndicator());
+            //     },
+            //   ),
+            // ),
             const SizedBox(
               height: 10,
             ),
@@ -157,46 +148,46 @@ class PlayScreen extends HookConsumerWidget {
                             );
                           }));
             }),
-            Consumer(builder: (context, ref, child) {
-              final lengthMatrix = ref.watch(lengthProvider);
-              final selectingIndex = ref.watch(selectingProvider);
-              final assets = ref.watch(assetsProvider);
-              return SizedBox(
-                // height: 70,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Slider(
-                        value: lengthMatrix.toDouble(),
-                        min: 2,
-                        max: 10,
-                        onChanged: (value) {
-                          ref.read(lengthProvider.notifier).state =
-                              value.toInt();
-                        }),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(lengthMatrix.toString()),
-                        TextButton(
-                          onPressed: () async {
-                            final bytes = await rootBundle
-                                .load(assets.value![selectingIndex]);
-                            ref
-                                .read(listImageControllerProvider.notifier)
-                                .splitImage(
-                                    bytes.buffer.asUint8List(), lengthMatrix);
-                          },
-                          child: const Text('ok'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            }),
+            // Consumer(builder: (context, ref, child) {
+            //   final lengthMatrix = ref.watch(lengthProvider);
+            //   final selectingIndex = ref.watch(selectingProvider);
+            //   final assets = ref.watch(assetsProvider);
+            //   return SizedBox(
+            //     // height: 70,
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       crossAxisAlignment: CrossAxisAlignment.center,
+            //       children: [
+            //         Slider(
+            //             value: lengthMatrix.toDouble(),
+            //             min: 2,
+            //             max: 10,
+            //             onChanged: (value) {
+            //               ref.read(lengthProvider.notifier).state =
+            //                   value.toInt();
+            //             }),
+            //         Row(
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             Text(lengthMatrix.toString()),
+            //             TextButton(
+            //               onPressed: () async {
+            //                 final bytes = await rootBundle
+            //                     .load(assets.value![selectingIndex]);
+            //                 ref
+            //                     .read(listImageControllerProvider.notifier)
+            //                     .splitImage(
+            //                         bytes.buffer.asUint8List(), lengthMatrix);
+            //               },
+            //               child: const Text('ok'),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   );
+            // }),
             Consumer(builder: (context, ref, child) {
               final move = ref.watch(moveProvider);
               return Text('$move');
@@ -207,31 +198,22 @@ class PlayScreen extends HookConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(secondsToMinutes(timer)),
-                  TextButton(
-                      onPressed: () {
-                        ref.read(timerProvider.notifier).start();
-                      },
-                      child: const Text('start')),
-                  TextButton(
-                      onPressed: () {
-                        ref.read(timerProvider.notifier).stop();
-                      },
-                      child: const Text('stop')),
+                  // TextButton(
+                  //     onPressed: () {
+                  //       ref.read(timerProvider.notifier).start();
+                  //     },
+                  //     child: const Text('start')),
+                  // TextButton(
+                  //     onPressed: () {
+                  //       ref.read(timerProvider.notifier).stop();
+                  //     },
+                  //     child: const Text('stop')),
                 ],
               );
             }),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        final ImagePicker _picker = ImagePicker();
-        final XFile? image =
-            await _picker.pickImage(source: ImageSource.gallery);
-        File newFile = File(image!.path);
-        ref
-            .read(photoProvider.notifier)
-            .updateUint8List(newFile.readAsBytesSync());
-      }),
     );
   }
 

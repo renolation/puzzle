@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:reno_puzzle/features/home_screen/domains/levels.dart';
 import 'package:reno_puzzle/features/play_screen/presentations/play_screen.dart';
 
 import '../features/home_screen/presentations/home_screen.dart';
@@ -33,10 +34,13 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/play',
         name: AppRoute.play.name,
-        pageBuilder: (context, state) => MaterialPage<void>(
-          key: state.pageKey,
-          child: const PlayScreen(),
-        ),
+        pageBuilder: (context, state) {
+          final levels = state.extra as Levels;
+          return MaterialPage(
+            key: state.pageKey,
+            child:  PlayScreen(levels: levels,),
+          );
+        }
       ),
       //creator
     ],

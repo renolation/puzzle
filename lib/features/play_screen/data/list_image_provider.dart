@@ -15,7 +15,14 @@ final listImageControllerProvider = StateNotifierProvider.autoDispose<ListImageC
 class ListImageController extends StateNotifier<List<List<Puzzle>>> {
   ListImageController(): super([]);
 
-   splitImage(Uint8List input, int length)  {
+  convertAsset(String path, int length) async {
+    print('ab');
+    final bytes =
+        await rootBundle.load(path);
+    splitImage(bytes.buffer.asUint8List(), length);
+  }
+
+  splitImage(Uint8List input, int length)  {
     img.Image?  image =  cropCenterSquare(img.decodeImage(input));
     int x = 0, y = 0;
     int width = (image!.width / length).floor();
@@ -94,7 +101,6 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
     return result;
   }
 
-
   List<List<Puzzle>>  swapNeighbors(List<List<Puzzle>> matrix, List<int> location1, List<int> location2) {
     int x1 = location1[0];
     int y1 = location1[1];
@@ -111,6 +117,7 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
     List<List<int>> neighborsWithValueZero = detectNeighbors(state, location);
     return neighborsWithValueZero;
   }
+
   void swap(List<List<int>> neighborsWithValueZero, List<int> location ){
     List<List<Puzzle>> matrix = [];
     for (var n in neighborsWithValueZero) {
@@ -119,6 +126,7 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
       print('build');
     }
   }
+
   bool detectSuccess(){
     // List<Puzzle> flatList = List.generate(state.length, (i) => state[i]).expand((i) => i).toList();
     List<Puzzle> flatList = state.expand((element) => element).toList();

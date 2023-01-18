@@ -24,6 +24,8 @@ mixin _$Levels {
   int get level => throw _privateConstructorUsedError;
   int get step => throw _privateConstructorUsedError;
   int get time => throw _privateConstructorUsedError;
+  String get pathAsset => throw _privateConstructorUsedError;
+  int get matrix => throw _privateConstructorUsedError;
   int? get remainTime => throw _privateConstructorUsedError;
   int get finish => throw _privateConstructorUsedError;
 
@@ -42,6 +44,8 @@ abstract class $LevelsCopyWith<$Res> {
       int level,
       int step,
       int time,
+      String pathAsset,
+      int matrix,
       int? remainTime,
       int finish});
 }
@@ -63,6 +67,8 @@ class _$LevelsCopyWithImpl<$Res, $Val extends Levels>
     Object? level = null,
     Object? step = null,
     Object? time = null,
+    Object? pathAsset = null,
+    Object? matrix = null,
     Object? remainTime = freezed,
     Object? finish = null,
   }) {
@@ -82,6 +88,14 @@ class _$LevelsCopyWithImpl<$Res, $Val extends Levels>
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
+              as int,
+      pathAsset: null == pathAsset
+          ? _value.pathAsset
+          : pathAsset // ignore: cast_nullable_to_non_nullable
+              as String,
+      matrix: null == matrix
+          ? _value.matrix
+          : matrix // ignore: cast_nullable_to_non_nullable
               as int,
       remainTime: freezed == remainTime
           ? _value.remainTime
@@ -106,6 +120,8 @@ abstract class _$$_LevelsCopyWith<$Res> implements $LevelsCopyWith<$Res> {
       int level,
       int step,
       int time,
+      String pathAsset,
+      int matrix,
       int? remainTime,
       int finish});
 }
@@ -124,6 +140,8 @@ class __$$_LevelsCopyWithImpl<$Res>
     Object? level = null,
     Object? step = null,
     Object? time = null,
+    Object? pathAsset = null,
+    Object? matrix = null,
     Object? remainTime = freezed,
     Object? finish = null,
   }) {
@@ -143,6 +161,14 @@ class __$$_LevelsCopyWithImpl<$Res>
       time: null == time
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
+              as int,
+      pathAsset: null == pathAsset
+          ? _value.pathAsset
+          : pathAsset // ignore: cast_nullable_to_non_nullable
+              as String,
+      matrix: null == matrix
+          ? _value.matrix
+          : matrix // ignore: cast_nullable_to_non_nullable
               as int,
       remainTime: freezed == remainTime
           ? _value.remainTime
@@ -165,6 +191,8 @@ class _$_Levels implements _Levels {
       required this.level,
       required this.step,
       required this.time,
+      required this.pathAsset,
+      required this.matrix,
       this.remainTime,
       this.finish = 0});
 
@@ -180,6 +208,10 @@ class _$_Levels implements _Levels {
   @override
   final int time;
   @override
+  final String pathAsset;
+  @override
+  final int matrix;
+  @override
   final int? remainTime;
   @override
   @JsonKey()
@@ -187,7 +219,7 @@ class _$_Levels implements _Levels {
 
   @override
   String toString() {
-    return 'Levels(difficulty: $difficulty, level: $level, step: $step, time: $time, remainTime: $remainTime, finish: $finish)';
+    return 'Levels(difficulty: $difficulty, level: $level, step: $step, time: $time, pathAsset: $pathAsset, matrix: $matrix, remainTime: $remainTime, finish: $finish)';
   }
 
   @override
@@ -200,6 +232,9 @@ class _$_Levels implements _Levels {
             (identical(other.level, level) || other.level == level) &&
             (identical(other.step, step) || other.step == step) &&
             (identical(other.time, time) || other.time == time) &&
+            (identical(other.pathAsset, pathAsset) ||
+                other.pathAsset == pathAsset) &&
+            (identical(other.matrix, matrix) || other.matrix == matrix) &&
             (identical(other.remainTime, remainTime) ||
                 other.remainTime == remainTime) &&
             (identical(other.finish, finish) || other.finish == finish));
@@ -207,8 +242,8 @@ class _$_Levels implements _Levels {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, difficulty, level, step, time, remainTime, finish);
+  int get hashCode => Object.hash(runtimeType, difficulty, level, step, time,
+      pathAsset, matrix, remainTime, finish);
 
   @JsonKey(ignore: true)
   @override
@@ -230,6 +265,8 @@ abstract class _Levels implements Levels {
       required final int level,
       required final int step,
       required final int time,
+      required final String pathAsset,
+      required final int matrix,
       final int? remainTime,
       final int finish}) = _$_Levels;
 
@@ -243,6 +280,10 @@ abstract class _Levels implements Levels {
   int get step;
   @override
   int get time;
+  @override
+  String get pathAsset;
+  @override
+  int get matrix;
   @override
   int? get remainTime;
   @override

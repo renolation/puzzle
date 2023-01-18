@@ -12,6 +12,8 @@ class Levels with _$Levels {
     required int level,
     required int step,
     required int time,
+    required String pathAsset,
+    required int matrix,
     int? remainTime,
     @Default(0) int finish, //* 1 2 3 star *//
 
