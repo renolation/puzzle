@@ -8,7 +8,7 @@ final timerProvider = StateNotifierProvider.autoDispose<TimerStateNotifier, int>
 );
 
 class TimerStateNotifier extends StateNotifier<int> {
-  late Timer _timer;
+   Timer? _timer;
   TimerStateNotifier() : super(0);
 
   @override
@@ -25,7 +25,7 @@ class TimerStateNotifier extends StateNotifier<int> {
 
   void stop() {
     print('stopeed');
-    _timer.cancel();
+    if(_timer != null) _timer!.cancel();
     state = 0;
   }
 }
