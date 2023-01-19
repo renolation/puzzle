@@ -20,14 +20,21 @@ Levels _$LevelsFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Levels {
-  int? get id => throw _privateConstructorUsedError;
+  @HiveField(0)
   int get difficulty => throw _privateConstructorUsedError;
+  @HiveField(1)
   int get level => throw _privateConstructorUsedError;
+  @HiveField(2)
   int get step => throw _privateConstructorUsedError;
+  @HiveField(3)
   int get time => throw _privateConstructorUsedError;
+  @HiveField(4)
   String get pathAsset => throw _privateConstructorUsedError;
+  @HiveField(5)
   int get matrix => throw _privateConstructorUsedError;
+  @HiveField(6)
   int? get remainTime => throw _privateConstructorUsedError;
+  @HiveField(7)
   int get finish => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,15 +48,14 @@ abstract class $LevelsCopyWith<$Res> {
       _$LevelsCopyWithImpl<$Res, Levels>;
   @useResult
   $Res call(
-      {int? id,
-      int difficulty,
-      int level,
-      int step,
-      int time,
-      String pathAsset,
-      int matrix,
-      int? remainTime,
-      int finish});
+      {@HiveField(0) int difficulty,
+      @HiveField(1) int level,
+      @HiveField(2) int step,
+      @HiveField(3) int time,
+      @HiveField(4) String pathAsset,
+      @HiveField(5) int matrix,
+      @HiveField(6) int? remainTime,
+      @HiveField(7) int finish});
 }
 
 /// @nodoc
@@ -65,7 +71,6 @@ class _$LevelsCopyWithImpl<$Res, $Val extends Levels>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
     Object? difficulty = null,
     Object? level = null,
     Object? step = null,
@@ -76,10 +81,6 @@ class _$LevelsCopyWithImpl<$Res, $Val extends Levels>
     Object? finish = null,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
       difficulty: null == difficulty
           ? _value.difficulty
           : difficulty // ignore: cast_nullable_to_non_nullable
@@ -123,15 +124,14 @@ abstract class _$$_LevelsCopyWith<$Res> implements $LevelsCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int? id,
-      int difficulty,
-      int level,
-      int step,
-      int time,
-      String pathAsset,
-      int matrix,
-      int? remainTime,
-      int finish});
+      {@HiveField(0) int difficulty,
+      @HiveField(1) int level,
+      @HiveField(2) int step,
+      @HiveField(3) int time,
+      @HiveField(4) String pathAsset,
+      @HiveField(5) int matrix,
+      @HiveField(6) int? remainTime,
+      @HiveField(7) int finish});
 }
 
 /// @nodoc
@@ -144,7 +144,6 @@ class __$$_LevelsCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
     Object? difficulty = null,
     Object? level = null,
     Object? step = null,
@@ -155,10 +154,6 @@ class __$$_LevelsCopyWithImpl<$Res>
     Object? finish = null,
   }) {
     return _then(_$_Levels(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
       difficulty: null == difficulty
           ? _value.difficulty
           : difficulty // ignore: cast_nullable_to_non_nullable
@@ -197,45 +192,50 @@ class __$$_LevelsCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Levels extends _Levels {
+@HiveType(typeId: 0, adapterName: 'LevelsAdapter')
+class _$_Levels implements _Levels {
   const _$_Levels(
-      {this.id,
-      required this.difficulty,
-      required this.level,
-      required this.step,
-      required this.time,
-      required this.pathAsset,
-      required this.matrix,
-      this.remainTime,
-      this.finish = 0})
-      : super._();
+      {@HiveField(0) required this.difficulty,
+      @HiveField(1) required this.level,
+      @HiveField(2) required this.step,
+      @HiveField(3) required this.time,
+      @HiveField(4) required this.pathAsset,
+      @HiveField(5) required this.matrix,
+      @HiveField(6) this.remainTime,
+      @HiveField(7) this.finish = 0});
 
   factory _$_Levels.fromJson(Map<String, dynamic> json) =>
       _$$_LevelsFromJson(json);
 
   @override
-  final int? id;
-  @override
+  @HiveField(0)
   final int difficulty;
   @override
+  @HiveField(1)
   final int level;
   @override
+  @HiveField(2)
   final int step;
   @override
+  @HiveField(3)
   final int time;
   @override
+  @HiveField(4)
   final String pathAsset;
   @override
+  @HiveField(5)
   final int matrix;
   @override
+  @HiveField(6)
   final int? remainTime;
   @override
   @JsonKey()
+  @HiveField(7)
   final int finish;
 
   @override
   String toString() {
-    return 'Levels(id: $id, difficulty: $difficulty, level: $level, step: $step, time: $time, pathAsset: $pathAsset, matrix: $matrix, remainTime: $remainTime, finish: $finish)';
+    return 'Levels(difficulty: $difficulty, level: $level, step: $step, time: $time, pathAsset: $pathAsset, matrix: $matrix, remainTime: $remainTime, finish: $finish)';
   }
 
   @override
@@ -243,7 +243,6 @@ class _$_Levels extends _Levels {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Levels &&
-            (identical(other.id, id) || other.id == id) &&
             (identical(other.difficulty, difficulty) ||
                 other.difficulty == difficulty) &&
             (identical(other.level, level) || other.level == level) &&
@@ -259,8 +258,8 @@ class _$_Levels extends _Levels {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, difficulty, level, step,
-      time, pathAsset, matrix, remainTime, finish);
+  int get hashCode => Object.hash(runtimeType, difficulty, level, step, time,
+      pathAsset, matrix, remainTime, finish);
 
   @JsonKey(ignore: true)
   @override
@@ -276,38 +275,42 @@ class _$_Levels extends _Levels {
   }
 }
 
-abstract class _Levels extends Levels {
+abstract class _Levels implements Levels {
   const factory _Levels(
-      {final int? id,
-      required final int difficulty,
-      required final int level,
-      required final int step,
-      required final int time,
-      required final String pathAsset,
-      required final int matrix,
-      final int? remainTime,
-      final int finish}) = _$_Levels;
-  const _Levels._() : super._();
+      {@HiveField(0) required final int difficulty,
+      @HiveField(1) required final int level,
+      @HiveField(2) required final int step,
+      @HiveField(3) required final int time,
+      @HiveField(4) required final String pathAsset,
+      @HiveField(5) required final int matrix,
+      @HiveField(6) final int? remainTime,
+      @HiveField(7) final int finish}) = _$_Levels;
 
   factory _Levels.fromJson(Map<String, dynamic> json) = _$_Levels.fromJson;
 
   @override
-  int? get id;
-  @override
+  @HiveField(0)
   int get difficulty;
   @override
+  @HiveField(1)
   int get level;
   @override
+  @HiveField(2)
   int get step;
   @override
+  @HiveField(3)
   int get time;
   @override
+  @HiveField(4)
   String get pathAsset;
   @override
+  @HiveField(5)
   int get matrix;
   @override
+  @HiveField(6)
   int? get remainTime;
   @override
+  @HiveField(7)
   int get finish;
   @override
   @JsonKey(ignore: true)

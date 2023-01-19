@@ -7,7 +7,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:isar/isar.dart';
 import 'package:reno_puzzle/features/home_screen/data/levels_controller.dart';
 import '../../../providers/providers.dart';
 import '../../home_screen/domains/levels.dart';
@@ -203,15 +202,11 @@ class PlayScreen extends HookConsumerWidget {
               );
             }),
             TextButton(onPressed: () async {
-              // final isar = await Isar.open([LevelsSchema]);
-              //
-              // await isar.writeTxn(() async {
-              //   await isar.LevelsSchema.put(levels);
-              // });
-              //  levels.copyWith(finish: 2);
+
               print(levels.toString());
-              await ref.read(isarManagerPod).insertLevels(levels.copyWith(finish: 2));
+              ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 2));
               ref.read(levelsControllerProvider.notifier).updateLevels();
+
             }, child: Text('add')),
           ],
         ),

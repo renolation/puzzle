@@ -1,28 +1,28 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reno_puzzle/providers/isar_manager.dart';
+import 'package:hive/hive.dart';
 import 'package:reno_puzzle/providers/providers.dart';
 
+import '../../../main.dart';
 import '../domains/levels.dart';
 import 'levels_repository.dart';
 
 final levelsControllerProvider =
 StateNotifierProvider.autoDispose<LevelsController, List<Levels>>((ref) {
-  final isarManager = ref.read(isarManagerPod);
-  return LevelsController(levelsRepository: ref.read(levelsRepositoryProvider), isarManager: isarManager);
+  return LevelsController(levelsRepository: ref.read(levelsRepositoryProvider));
 });
 
 class LevelsController extends StateNotifier<List<Levels>> {
 
-  LevelsController({required this.levelsRepository,required this.isarManager}) : super([]){
+  LevelsController({required this.levelsRepository}) : super([]){
     getLocalLevels();
   }
   final LevelsRepository levelsRepository;
-  final IsarManager isarManager;
-  
+
   getLocalLevels() async {
     await levelsRepository.fetchLevelsLocal().then((value) async {
-      final secondList = await isarManager.getListDB();
+      var box = await Hive.openBox<Levels>(levelsBox);
+      var secondList =  box.values.toList();
 
       print(secondList.toString());
       final firstList = value.map((e) =>
@@ -38,10 +38,16 @@ class LevelsController extends StateNotifier<List<Levels>> {
     });
   }
 
+  addLevels(Levels levels) async {
+    var box = await Hive.openBox<Levels>(levelsBox);
+    String key = '${levels.difficulty}.${levels.level}';
+    box.put(key, levels);
+  }
+
   updateLevels() async {
     print('update');
-    final secondList = await isarManager.getListDB();
-
+    var box = await Hive.openBox<Levels>(levelsBox);
+    var secondList =  box.values.toList();
     List<Levels> firstList = state;
      firstList = firstList.map((e) =>
         secondList.firstWhere((element) {
@@ -57,5 +63,5 @@ class LevelsController extends StateNotifier<List<Levels>> {
     print('done');
   }
 
- 
+
 }

@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reno_puzzle/providers/providers.dart';
 
@@ -11,19 +11,19 @@ import 'features/home_screen/domains/levels.dart';
 import 'features/play_screen/presentations/play_screen.dart';
 import 'routing/app_router.dart';
 
-getIsar() async {
-  final dir = await getApplicationDocumentsDirectory();
-  return Isar.open([LevelsSchema], directory: dir.path);
-}
+const levelsBox = 'levelsBox';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final isar = await getIsar();
-  runApp(
+  await Hive.initFlutter();
+  Hive.registerAdapter(LevelsAdapter());
+  await Hive.openBox<Levels>(levelsBox);
+
+  runApp( const
      ProviderScope(
         overrides: [
-      isarProvider.overrideWithValue(isar),
-    ],child: const MyApp(),),
+    ],child:  MyApp(),),
   );
 }
 

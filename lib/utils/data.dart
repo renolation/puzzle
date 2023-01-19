@@ -47,7 +47,6 @@ final List<Levels> listLevels = [
     matrix: 4,
   ),
   const Levels(
-    id: null,
     difficulty: 1,
     level: 6,
     step: 0,
