@@ -2,14 +2,15 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final timerProvider = StateNotifierProvider.autoDispose<TimerStateNotifier, int>((ref) {
-  return TimerStateNotifier();
+final timerProvider = StateNotifierProvider.autoDispose.family<TimerStateNotifier, int, int>((ref, time) {
+  return TimerStateNotifier(time);
 }
 );
 
 class TimerStateNotifier extends StateNotifier<int> {
    Timer? _timer;
-  TimerStateNotifier() : super(0);
+  TimerStateNotifier(this.time) : super(time);
+  final int time;
 
   @override
   void dispose() {
@@ -19,13 +20,18 @@ class TimerStateNotifier extends StateNotifier<int> {
 
   void start() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state++;
+      state--;
+      if(state == 0){
+        stop();
+      }
     });
+
   }
 
   void stop() {
     print('stopeed');
-    if(_timer != null) _timer!.cancel();
     state = 0;
+    if(_timer != null) _timer!.cancel();
+
   }
 }

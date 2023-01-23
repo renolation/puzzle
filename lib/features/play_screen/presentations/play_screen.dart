@@ -126,7 +126,7 @@ class PlayScreen extends HookConsumerWidget {
                                     return;
                                   }
                                   if (ref.read(moveProvider.notifier).state == 0) {
-                                    ref.read(timerProvider.notifier).start();
+                                    ref.read(timerProvider(levels.time).notifier).start();
                                   }
 
                                   ref.read(moveProvider.notifier).state += 1;
@@ -197,7 +197,11 @@ class PlayScreen extends HookConsumerWidget {
               return Text('${levels.step-move}');
             }),
             Consumer(builder: (context, ref, child) {
-              final timer = ref.watch(timerProvider);
+              final timer = ref.watch(timerProvider(levels.time));
+              // final move = ref.watch(moveProvider);
+              //
+              // int timeLeft = levels.time - timer;
+              // if(timer == 0) timeLeft = 0;
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
