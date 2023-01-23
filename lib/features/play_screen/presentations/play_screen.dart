@@ -211,6 +211,15 @@ class PlayScreen extends HookConsumerWidget {
             }),
             TextButton(onPressed: () async {
 
+              ref.read(timerProvider(levels.time).notifier).stop();
+              ref.read(timerProvider(levels.time).notifier).reset();
+              ref.read(moveProvider.notifier).state = 0;
+              ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+
+
+            }, child: const Text('restart')),
+            TextButton(onPressed: () async {
+
               print(levels.toString());
               ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 2));
               ref.read(levelsControllerProvider.notifier).updateLevels();

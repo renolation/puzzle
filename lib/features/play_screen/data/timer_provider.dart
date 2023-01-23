@@ -18,6 +18,10 @@ class TimerStateNotifier extends StateNotifier<int> {
     super.dispose();
   }
 
+  void reset(){
+    state = time;
+  }
+
   void start() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state--;
@@ -30,8 +34,7 @@ class TimerStateNotifier extends StateNotifier<int> {
 
   void stop() {
     print('stopeed');
-    state = 0;
+    // state = 0;
     if(_timer != null) _timer!.cancel();
-
   }
 }
