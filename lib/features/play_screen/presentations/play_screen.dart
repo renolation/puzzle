@@ -121,6 +121,10 @@ class PlayScreen extends HookConsumerWidget {
                                     .swapNeighborsWithValueZero([row, col]);
 
                                 if (neighborsWithValueZero.isNotEmpty) {
+                                  if(ref.read(moveProvider.notifier).state == levels.step){
+                                    print('fail');
+                                    return;
+                                  }
                                   if (ref.read(moveProvider.notifier).state == 0) {
                                     ref.read(timerProvider.notifier).start();
                                   }
@@ -190,7 +194,7 @@ class PlayScreen extends HookConsumerWidget {
             // }),
             Consumer(builder: (context, ref, child) {
               final move = ref.watch(moveProvider);
-              return Text('$move');
+              return Text('${levels.step-move}');
             }),
             Consumer(builder: (context, ref, child) {
               final timer = ref.watch(timerProvider);

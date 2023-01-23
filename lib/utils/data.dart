@@ -5,7 +5,7 @@ final List<Levels> listLevels = [
 
     difficulty: 1,
     level: 1,
-    step: 0,
+    step: 10,
     time: 1800,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 3,
@@ -14,7 +14,7 @@ final List<Levels> listLevels = [
 
     difficulty: 1,
     level: 2,
-    step: 0,
+    step: 10,
     time: 1800,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 3,
@@ -23,7 +23,7 @@ final List<Levels> listLevels = [
 
     difficulty: 1,
     level: 3,
-    step: 0,
+    step: 20,
     time: 1800,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 3,
@@ -32,7 +32,7 @@ final List<Levels> listLevels = [
 
     difficulty: 1,
     level: 4,
-    step: 0,
+    step: 50,
     time: 1800,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 3,
@@ -41,7 +41,7 @@ final List<Levels> listLevels = [
 
     difficulty: 1,
     level: 5,
-    step: 0,
+    step: 40,
     time: 1800,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 4,
@@ -49,7 +49,7 @@ final List<Levels> listLevels = [
   const Levels(
     difficulty: 1,
     level: 6,
-    step: 0,
+    step: 50,
     time: 1800,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 4,
