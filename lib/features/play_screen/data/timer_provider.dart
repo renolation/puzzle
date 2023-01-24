@@ -34,7 +34,6 @@ class TimerStateNotifier extends StateNotifier<int> {
 
   void stop() {
     print('stopeed');
-    // state = 0;
     if(_timer != null) _timer!.cancel();
   }
 }

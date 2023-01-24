@@ -28,11 +28,35 @@ class PlayScreen extends HookConsumerWidget {
     useMemoized(
       () {
         ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
-
         return null;
       },
       [],
     );
+
+
+    ref.listen<int>(timerProvider(levels.time), (int? previousCount, int newCount) {
+      print('The counter changed $newCount');
+      print(levels.time);
+      if(newCount == 0){
+        print('time up');
+        showDialog(context: context, builder: (context){
+          return AlertDialog(
+            title: Text('abccc'),
+            actions: [
+              TextButton(onPressed: (){
+                Navigator.pop(context);
+              }, child: Text('abc')),
+            ],
+          );
+        },
+        barrierDismissible: false);
+      }
+    });
+    ref.listen<int>(moveProvider, (previous, next) {
+      if(next == levels.step){
+        print('fail step');
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -125,6 +149,11 @@ class PlayScreen extends HookConsumerWidget {
                                     print('fail');
                                     return;
                                   }
+                                  print(ref.read(timerProvider(levels.time)));
+                                  if(ref.read(timerProvider(levels.time)) == 0){
+                                    print('fail time');
+                                    return;
+                                  }
                                   if (ref.read(moveProvider.notifier).state == 0) {
                                     ref.read(timerProvider(levels.time).notifier).start();
                                   }
@@ -198,10 +227,6 @@ class PlayScreen extends HookConsumerWidget {
             }),
             Consumer(builder: (context, ref, child) {
               final timer = ref.watch(timerProvider(levels.time));
-              // final move = ref.watch(moveProvider);
-              //
-              // int timeLeft = levels.time - timer;
-              // if(timer == 0) timeLeft = 0;
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -209,6 +234,7 @@ class PlayScreen extends HookConsumerWidget {
                 ],
               );
             }),
+
             TextButton(onPressed: () async {
 
               ref.read(timerProvider(levels.time).notifier).stop();
