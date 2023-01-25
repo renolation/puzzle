@@ -43,11 +43,9 @@ class LevelScreen extends HookConsumerWidget {
             Expanded(
               child: Consumer(builder: (context, ref, child){
                 final data = ref.watch(levelsControllerProvider);
-                print(data.length);
                 return ListView.builder(
                   itemCount: data.length,
                     itemBuilder: (context, index){
-
                     return GestureDetector(
                         onTap: (){
 
@@ -63,6 +61,7 @@ class LevelScreen extends HookConsumerWidget {
                 );
               }),
             ),
+            Text('done'),
             Container(
               height: 300,
               child: ValueListenableBuilder(

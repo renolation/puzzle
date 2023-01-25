@@ -30,7 +30,7 @@ final List<Levels> listLevels = [
   ),
   Levels(
 
-    difficulty: 1,
+    difficulty: 2,
     level: 4,
     step: 50,
     time: 1800,
@@ -39,7 +39,7 @@ final List<Levels> listLevels = [
   ),
   Levels(
 
-    difficulty: 1,
+    difficulty: 3,
     level: 5,
     step: 40,
     time: 1800,
@@ -47,7 +47,7 @@ final List<Levels> listLevels = [
     matrix: 4,
   ),
   const Levels(
-    difficulty: 1,
+    difficulty: 2,
     level: 6,
     step: 50,
     time: 1800,

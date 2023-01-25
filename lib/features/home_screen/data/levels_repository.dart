@@ -23,9 +23,10 @@ class LevelsRepository {
       rethrow;
     }
   }
-  Future<List<Levels>> fetchLevelsLocal() async {
+  Future<List<Levels>> fetchLevelsLocal(int difficulty) async {
     try {
-      return listLevels;
+      final newList = listLevels.where((element) => element.difficulty == difficulty);
+      return newList.toList();
     }
     on DioError catch (e) {
       dev.log(e.toString());

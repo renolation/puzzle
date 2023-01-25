@@ -9,22 +9,24 @@ import 'levels_repository.dart';
 
 final levelsControllerProvider =
 StateNotifierProvider.autoDispose<LevelsController, List<Levels>>((ref) {
-  return LevelsController(levelsRepository: ref.read(levelsRepositoryProvider));
+  final difficulty = ref.watch(difficultyProvider);
+  print('diffi $difficulty');
+  return LevelsController(levelsRepository: ref.read(levelsRepositoryProvider), difficulty: difficulty);
 });
 
 class LevelsController extends StateNotifier<List<Levels>> {
 
-  LevelsController({required this.levelsRepository}) : super([]){
-    getLocalLevels();
+  LevelsController({required this.levelsRepository, required this.difficulty}) : super([]){
+    getLocalLevels(difficulty);
   }
   final LevelsRepository levelsRepository;
+  final int difficulty;
 
-  getLocalLevels() async {
-    await levelsRepository.fetchLevelsLocal().then((value) async {
+  getLocalLevels(int difficulty) async {
+    await levelsRepository.fetchLevelsLocal(difficulty).then((value) async {
       var box = await Hive.openBox<Levels>(levelsBox);
       var secondList =  box.values.toList();
-
-      print(secondList.toString());
+      // print(secondList.toString());
       final firstList = value.map((e) =>
           secondList.firstWhere((element) {
             if(e.difficulty == element.difficulty && e.level == element.level){

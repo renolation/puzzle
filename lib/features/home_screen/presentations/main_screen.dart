@@ -18,7 +18,7 @@ class MainScreen extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('main'),
+        const Text('main'),
         Row(
           children: [
             InkWell(
@@ -29,11 +29,24 @@ class MainScreen extends HookConsumerWidget {
             ),
           ],
         ),
-        TextButton(onPressed: (){
-          ref
+        // TextButton(onPressed: (){
+        //   ref
+        //       .read(homeScreenTypeProvider.notifier)
+        //       .update((state) => HomeScreenState.difficulty);
+        // }, child: Text('play')),
+        InkWell(
+          onTap: () => ref
               .read(homeScreenTypeProvider.notifier)
-              .update((state) => HomeScreenState.difficulty);
-        }, child: Text('play')),
+              .update((state) => HomeScreenState.difficulty),
+          child: Container(
+            width: 200,
+            height: 100,
+            color: Colors.yellow,
+            child: const Center(
+              child: Text('Play'),
+            ),
+          ),
+        ),
       ],
     ));
   }
