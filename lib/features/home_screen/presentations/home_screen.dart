@@ -16,35 +16,33 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('abc'),
+        title: const Text('Puzzle'),
       ),
-      body: Container(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 32, left: 20, right: 20,bottom: 4),
-                child: Consumer(builder: (context, ref, child) {
-                  final homeScreenType = ref.watch(homeScreenTypeProvider);
-                  // return const MainScreen();
-                  switch(homeScreenType){
-                    case HomeScreenState.main:
-                      return const MainScreen();
-                      break;
-                    case HomeScreenState.difficulty:
-                      return const DifficultyScreen();
-                      break;
-                    case HomeScreenState.level:
-                      return const LevelScreen();
-                      break;
-                  }
-                }),
-              ),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 32, left: 20, right: 20,bottom: 4),
+              child: Consumer(builder: (context, ref, child) {
+                final homeScreenType = ref.watch(homeScreenTypeProvider);
+                // return const MainScreen();
+                switch(homeScreenType){
+                  case HomeScreenState.main:
+                    return const MainScreen();
+                    break;
+                  case HomeScreenState.difficulty:
+                    return const DifficultyScreen();
+                    break;
+                  case HomeScreenState.level:
+                    return const LevelScreen();
+                    break;
+                }
+              }),
             ),
-            SizedBox(height: 20,),
-          ],
-        ),
+          ),
+          SizedBox(height: 20,),
+        ],
       ),
     );
   }

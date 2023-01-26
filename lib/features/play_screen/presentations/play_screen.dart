@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reno_puzzle/features/home_screen/data/levels_controller.dart';
 import '../../../providers/providers.dart';
+import '../../../utils/confetti_hook.dart';
+import '../../../utils/custom_ui.dart';
 import '../../home_screen/domains/levels.dart';
 import '../data/home_provider.dart';
 import '../data/list_image_provider.dart';
@@ -25,6 +28,7 @@ class PlayScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     useMemoized(
       () {
         ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
@@ -33,6 +37,7 @@ class PlayScreen extends HookConsumerWidget {
       [],
     );
 
+    final ConfettiController controllerCenter = useConfettiController(duration: const Duration(seconds: 10));
 
     ref.listen<int>(timerProvider(levels.time), (int? previousCount, int newCount) {
       print('The counter changed $newCount');
@@ -132,61 +137,76 @@ class PlayScreen extends HookConsumerWidget {
                             child: Text('select'),
                           ),
                         )
-                      : GridView.builder(
-                          itemCount: listImage.length * listImage[0].length,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: listImage[0].length,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 5,
-                              mainAxisSpacing: 5),
-                          itemBuilder: (context, index) {
-                            int row = index ~/ listImage[0].length;
-                            int col = index % listImage[0].length;
-                            return GestureDetector(
-                              onTap: () {
-                                final neighborsWithValueZero = ref
-                                    .read(listImageControllerProvider.notifier)
-                                    .swapNeighborsWithValueZero([row, col]);
+                      : Stack(
+                        children: [
+                          GridView.builder(
+                              itemCount: listImage.length * listImage[0].length,
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: listImage[0].length,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 5,
+                                  mainAxisSpacing: 5),
+                              itemBuilder: (context, index) {
+                                int row = index ~/ listImage[0].length;
+                                int col = index % listImage[0].length;
+                                return GestureDetector(
+                                  onTap: () {
+                                    final neighborsWithValueZero = ref
+                                        .read(listImageControllerProvider.notifier)
+                                        .swapNeighborsWithValueZero([row, col]);
 
-                                if (neighborsWithValueZero.isNotEmpty) {
-                                  if(ref.read(moveProvider.notifier).state == levels.step){
-                                    print('fail');
-                                    return;
-                                  }
-                                  print(ref.read(timerProvider(levels.time)));
-                                  if(ref.read(timerProvider(levels.time)) == 0){
-                                    print('fail time');
-                                    return;
-                                  }
-                                  if (ref.read(moveProvider.notifier).state == 0) {
-                                    ref.read(timerProvider(levels.time).notifier).start();
-                                  }
+                                    if (neighborsWithValueZero.isNotEmpty) {
+                                      if(ref.read(moveProvider.notifier).state == levels.step){
+                                        print('fail');
+                                        return;
+                                      }
+                                      print(ref.read(timerProvider(levels.time)));
+                                      if(ref.read(timerProvider(levels.time)) == 0){
+                                        print('fail time');
+                                        return;
+                                      }
+                                      if (ref.read(moveProvider.notifier).state == 0) {
+                                        ref.read(timerProvider(levels.time).notifier).start();
+                                      }
 
-                                  ref.read(moveProvider.notifier).state += 1;
-                                  ref
-                                      .read(listImageControllerProvider.notifier)
-                                      .swap(neighborsWithValueZero, [row, col]);
-                                  if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
-                                    print('success');
-                                    ref.read(timerProvider(levels.time).notifier).stop();
-                                    ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 3));
-                                    ref.read(levelsControllerProvider.notifier).updateLevels();
-                                  }
-                                } else {
-                                  print('wrong');
-                                }
-                              },
-                              child: Container(
-                                  color: Colors.transparent,
-                                  // child: Text('${listImage[index]}'));
-                                  child: Stack(
-                                    children: [
-                                      Image.memory(listImage[row][col].unit8List!),
-                                      Text(listImage[row][col].index.toString(), style: TextStyle(color: Colors.yellow),),
-                                    ],
-                                  )),
-                            );
-                          }));
+                                      ref.read(moveProvider.notifier).state += 1;
+                                      ref
+                                          .read(listImageControllerProvider.notifier)
+                                          .swap(neighborsWithValueZero, [row, col]);
+                                      if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
+                                        print('success');
+                                        // ref.read(isSuccessProvider.notifier).state = true;
+                                        ref.read(timerProvider(levels.time).notifier).stop();
+                                        ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 3));
+                                        ref.read(levelsControllerProvider.notifier).updateLevels();
+                                      }
+                                    } else {
+                                      print('wrong');
+                                    }
+                                  },
+                                  child: Container(
+                                      color: Colors.transparent,
+                                      // child: Text('${listImage[index]}'));
+                                      child: Stack(
+                                        children: [
+                                          Image.memory(listImage[row][col].unit8List!),
+                                          Text(listImage[row][col].index.toString(), style: TextStyle(color: Colors.yellow),),
+                                        ],
+                                      )),
+                                );
+                              }),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: ConfettiWidget(
+                              confettiController: controllerCenter,
+                              blastDirectionality: BlastDirectionality.explosive, // don't specify a direction, blast randomly
+                              shouldLoop: true, // start again as soon as the animation is finished
+                              colors: const [Colors.green, Colors.blue, Colors.pink, Colors.orange, Colors.purple], // manually specify the colors to be used
+                              createParticlePath: drawStar, // define a custom shape/path.
+                            ),
+                          ),
+                        ],
+                      ));
             }),
             // Consumer(builder: (context, ref, child) {
             //   final lengthMatrix = ref.watch(lengthProvider);
@@ -253,11 +273,11 @@ class PlayScreen extends HookConsumerWidget {
             }, child: const Text('restart')),
             TextButton(onPressed: () async {
 
-              print(levels.toString());
-              ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 2));
-              ref.read(levelsControllerProvider.notifier).updateLevels();
-
-            }, child: Text('add')),
+              // print(levels.toString());
+              // ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 2));
+              // ref.read(levelsControllerProvider.notifier).updateLevels();
+              // controllerCenter.play();
+            }, child: Text('confetti')),
           ],
         ),
       ),

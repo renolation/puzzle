@@ -55,8 +55,12 @@ class LevelScreen extends HookConsumerWidget {
                         },
                         child: Container(
                             height: 40,
-                            color: data[index].finish == 0 ? Colors.red : Colors.blue,
-                            child: Text(' ${data[index].difficulty} : ${data[index].level}: ${data[index].finish}')));
+                            margin: EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                              color: data[index].finish == 0 ? Colors.red : Colors.blue,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(child: Text('difficulty ${data[index].difficulty} - level ${data[index].level} - finish : ${data[index].finish}'))));
                     }
                 );
               }),
@@ -71,7 +75,7 @@ class LevelScreen extends HookConsumerWidget {
                       itemCount: box.values.length,
                       itemBuilder: (context, index){
                          Levels? levels = box.getAt(index);
-                         return   Text(' ${levels!.difficulty} : ${levels.level}: ${levels.finish}');
+                         return   Text('difficulty ${levels!.difficulty} - level ${levels.level} - finish : ${levels.finish}');
 
                       }
                   );
