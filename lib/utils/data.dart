@@ -5,8 +5,8 @@ final List<Levels> listLevels = [
 
     difficulty: 1,
     level: 1,
-    step: 10,
-    time: 10,
+    step: 1000,
+    time: 1000,
     pathAsset: 'assets/photo/mk-s-dcmakwtE--4-unsplash.jpg',
     matrix: 3,
   ),

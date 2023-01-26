@@ -44,6 +44,10 @@ class PlayScreen extends HookConsumerWidget {
             title: Text('abccc'),
             actions: [
               TextButton(onPressed: (){
+                ref.read(timerProvider(levels.time).notifier).stop();
+                ref.read(timerProvider(levels.time).notifier).reset();
+                ref.read(moveProvider.notifier).state = 0;
+                ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
                 Navigator.pop(context);
               }, child: Text('abc')),
             ],
@@ -164,6 +168,9 @@ class PlayScreen extends HookConsumerWidget {
                                       .swap(neighborsWithValueZero, [row, col]);
                                   if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
                                     print('success');
+                                    ref.read(timerProvider(levels.time).notifier).stop();
+                                    ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 3));
+                                    ref.read(levelsControllerProvider.notifier).updateLevels();
                                   }
                                 } else {
                                   print('wrong');
@@ -175,7 +182,7 @@ class PlayScreen extends HookConsumerWidget {
                                   child: Stack(
                                     children: [
                                       Image.memory(listImage[row][col].unit8List!),
-                                      Text(listImage[row][col].index.toString()),
+                                      Text(listImage[row][col].index.toString(), style: TextStyle(color: Colors.yellow),),
                                     ],
                                   )),
                             );
