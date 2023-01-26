@@ -10,7 +10,7 @@ import 'levels_repository.dart';
 final levelsControllerProvider =
 StateNotifierProvider.autoDispose<LevelsController, List<Levels>>((ref) {
   final difficulty = ref.watch(difficultyProvider);
-  print('diffi $difficulty');
+  // print('diffi $difficulty');
   return LevelsController(levelsRepository: ref.read(levelsRepositoryProvider), difficulty: difficulty);
 });
 

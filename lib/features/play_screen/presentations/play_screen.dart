@@ -1,22 +1,17 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image/image.dart' as img;
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:reno_puzzle/features/home_screen/data/levels_controller.dart';
 import '../../../providers/providers.dart';
 import '../../../utils/confetti_hook.dart';
 import '../../../utils/custom_ui.dart';
 import '../../home_screen/domains/levels.dart';
-import '../data/home_provider.dart';
 import '../data/list_image_provider.dart';
 import '../data/timer_provider.dart';
-import '../domains/puzzle.dart';
+import 'dart:developer' as dev;
 
 class PlayScreen extends HookConsumerWidget {
   const PlayScreen({
@@ -28,7 +23,6 @@ class PlayScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     useMemoized(
       () {
         ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
@@ -40,40 +34,74 @@ class PlayScreen extends HookConsumerWidget {
     final ConfettiController controllerCenter = useConfettiController(duration: const Duration(seconds: 10));
 
     ref.listen<int>(timerProvider(levels.time), (int? previousCount, int newCount) {
-      print('The counter changed $newCount');
-      print(levels.time);
-      if(newCount == 0){
-        print('time up');
-        showDialog(context: context, builder: (context){
-          return AlertDialog(
-            title: Text('abccc'),
-            actions: [
-              TextButton(onPressed: (){
-                ref.read(timerProvider(levels.time).notifier).stop();
-                ref.read(timerProvider(levels.time).notifier).reset();
-                ref.read(moveProvider.notifier).state = 0;
-                ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
-                Navigator.pop(context);
-              }, child: Text('abc')),
-            ],
-          );
-        },
-        barrierDismissible: false);
+      if (newCount == 0) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Time is up'),
+                content: const Text('Watch an ad to get more time?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Back'),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        // ref.read(timerProvider(levels.time).notifier).stop();
+                        // ref.read(timerProvider(levels.time).notifier).reset();
+                        // ref.read(moveProvider.notifier).state = 0;
+                        // ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Watch')),
+                ],
+              );
+            },
+            barrierDismissible: false);
       }
     });
     ref.listen<int>(moveProvider, (previous, next) {
-      if(next == levels.step){
-        print('fail step');
+      if (next == levels.step) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title:const  Text('No more step'),
+                content: const Text('Watch an ad to get more step?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Back'),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        // ref.read(timerProvider(levels.time).notifier).stop();
+                        // ref.read(timerProvider(levels.time).notifier).reset();
+                        // ref.read(moveProvider.notifier).state = 0;
+                        // ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Watch')),
+                ],
+              );
+            },
+            barrierDismissible: false);
       }
     });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('asdasd'),
+        actions: [
+          IconButton(onPressed: (){}, icon: const Icon(FontAwesomeIcons.volumeHigh)),
+          const SizedBox(width: 8,),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // SizedBox(
             //   height: 150,
@@ -115,17 +143,55 @@ class PlayScreen extends HookConsumerWidget {
             //     },
             //   ),
             // ),
-          SizedBox(
-                                height: 250,
-                                width: 250,
-                                child: Image.asset(
-                                  levels.pathAsset,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-            const SizedBox(
-              height: 10,
+            Align(
+              alignment: Alignment.center,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                height: 230,
+                width: 230,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Image.asset(
+                  levels.pathAsset,
+                  fit: BoxFit.cover,
+                  height: 190,
+                  width: 190,
+                ),
+              ),
             ),
+            const SizedBox(
+              height: 16,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Consumer(builder: (context, ref, child) {
+                  final move = ref.watch(moveProvider);
+                  return Row(
+                    children: [
+                      const Icon(FontAwesomeIcons.shoePrints, size: 16,),
+                      const SizedBox(width: 8,),
+                      Text('${levels.step - move}'),
+                    ],
+                  );
+                }),
+                const SizedBox(width: 64,),
+                Consumer(builder: (context, ref, child) {
+                  final timer = ref.watch(timerProvider(levels.time));
+                  return Row(
+                    children: [
+                      const Icon(FontAwesomeIcons.stopwatch, size: 20,),
+                      const SizedBox(width: 8,),
+                      Text(secondsToMinutes(timer)),
+                    ],
+                  );
+                }),
+              ],
+            ),
+            const SizedBox(height: 16,),
             Consumer(builder: (context, ref, child) {
               final listImage = ref.watch(listImageControllerProvider);
               return SizedBox(
@@ -138,75 +204,87 @@ class PlayScreen extends HookConsumerWidget {
                           ),
                         )
                       : Stack(
-                        children: [
-                          GridView.builder(
-                              itemCount: listImage.length * listImage[0].length,
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: listImage[0].length,
-                                  childAspectRatio: 1,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 5),
-                              itemBuilder: (context, index) {
-                                int row = index ~/ listImage[0].length;
-                                int col = index % listImage[0].length;
-                                return GestureDetector(
-                                  onTap: () {
-                                    final neighborsWithValueZero = ref
-                                        .read(listImageControllerProvider.notifier)
-                                        .swapNeighborsWithValueZero([row, col]);
-
-                                    if (neighborsWithValueZero.isNotEmpty) {
-                                      if(ref.read(moveProvider.notifier).state == levels.step){
-                                        print('fail');
-                                        return;
-                                      }
-                                      print(ref.read(timerProvider(levels.time)));
-                                      if(ref.read(timerProvider(levels.time)) == 0){
-                                        print('fail time');
-                                        return;
-                                      }
-                                      if (ref.read(moveProvider.notifier).state == 0) {
-                                        ref.read(timerProvider(levels.time).notifier).start();
-                                      }
-
-                                      ref.read(moveProvider.notifier).state += 1;
-                                      ref
+                          children: [
+                            GridView.builder(
+                                itemCount: listImage.length * listImage[0].length,
+                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: listImage[0].length,
+                                    childAspectRatio: 1,
+                                    crossAxisSpacing: 5,
+                                    mainAxisSpacing: 5),
+                                itemBuilder: (context, index) {
+                                  int row = index ~/ listImage[0].length;
+                                  int col = index % listImage[0].length;
+                                  return GestureDetector(
+                                    onTap: () {
+                                      final neighborsWithValueZero = ref
                                           .read(listImageControllerProvider.notifier)
-                                          .swap(neighborsWithValueZero, [row, col]);
-                                      if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
-                                        print('success');
-                                        // ref.read(isSuccessProvider.notifier).state = true;
-                                        ref.read(timerProvider(levels.time).notifier).stop();
-                                        ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 3));
-                                        ref.read(levelsControllerProvider.notifier).updateLevels();
+                                          .swapNeighborsWithValueZero([row, col]);
+
+                                      if (neighborsWithValueZero.isNotEmpty) {
+                                        if (ref.read(moveProvider.notifier).state == levels.step) {
+                                          dev.log('fail');
+                                          return;
+                                        }
+                                        dev.log(ref.read(timerProvider(levels.time) as ProviderListenable<String>));
+                                        if (ref.read(timerProvider(levels.time)) == 0) {
+                                          dev.log('fail time');
+                                          return;
+                                        }
+                                        if (ref.read(moveProvider.notifier).state == 0) {
+                                          ref.read(timerProvider(levels.time).notifier).start();
+                                        }
+
+                                        ref.read(moveProvider.notifier).state += 1;
+                                        ref
+                                            .read(listImageControllerProvider.notifier)
+                                            .swap(neighborsWithValueZero, [row, col]);
+                                        if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
+                                          dev.log('success');
+                                          // ref.read(isSuccessProvider.notifier).state = true;
+                                          ref.read(timerProvider(levels.time).notifier).stop();
+                                          ref
+                                              .read(levelsControllerProvider.notifier)
+                                              .addLevels(levels.copyWith(finish: 3));
+                                          ref.read(levelsControllerProvider.notifier).updateLevels();
+                                        }
+                                      } else {
+                                        dev.log('wrong');
                                       }
-                                    } else {
-                                      print('wrong');
-                                    }
-                                  },
-                                  child: Container(
-                                      color: Colors.transparent,
-                                      // child: Text('${listImage[index]}'));
-                                      child: Stack(
-                                        children: [
-                                          Image.memory(listImage[row][col].unit8List!),
-                                          Text(listImage[row][col].index.toString(), style: TextStyle(color: Colors.yellow),),
-                                        ],
-                                      )),
-                                );
-                              }),
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: ConfettiWidget(
-                              confettiController: controllerCenter,
-                              blastDirectionality: BlastDirectionality.explosive, // don't specify a direction, blast randomly
-                              shouldLoop: true, // start again as soon as the animation is finished
-                              colors: const [Colors.green, Colors.blue, Colors.pink, Colors.orange, Colors.purple], // manually specify the colors to be used
-                              createParticlePath: drawStar, // define a custom shape/path.
+                                    },
+                                    child: Container(
+                                        color: Colors.transparent,
+                                        // child: Text('${listImage[index]}'));
+                                        child: Stack(
+                                          children: [
+                                            Image.memory(listImage[row][col].unit8List!),
+                                            Text(
+                                              listImage[row][col].index.toString(),
+                                              style: const TextStyle(color: Colors.yellow),
+                                            ),
+                                          ],
+                                        )),
+                                  );
+                                }),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: ConfettiWidget(
+                                confettiController: controllerCenter,
+                                blastDirectionality:
+                                    BlastDirectionality.explosive, // don't specify a direction, blast randomly
+                                shouldLoop: true, // start again as soon as the animation is finished
+                                colors: const [
+                                  Colors.green,
+                                  Colors.blue,
+                                  Colors.pink,
+                                  Colors.orange,
+                                  Colors.purple
+                                ], // manually specify the colors to be used
+                                createParticlePath: drawStar, // define a custom shape/path.
+                              ),
                             ),
-                          ),
-                        ],
-                      ));
+                          ],
+                        ));
             }),
             // Consumer(builder: (context, ref, child) {
             //   final lengthMatrix = ref.watch(lengthProvider);
@@ -248,51 +326,54 @@ class PlayScreen extends HookConsumerWidget {
             //     ),
             //   );
             // }),
-            Consumer(builder: (context, ref, child) {
-              final move = ref.watch(moveProvider);
-              return Text('${levels.step-move}');
-            }),
-            Consumer(builder: (context, ref, child) {
-              final timer = ref.watch(timerProvider(levels.time));
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(secondsToMinutes(timer)),
-                ],
-              );
-            }),
 
-            TextButton(onPressed: () async {
-
-              ref.read(timerProvider(levels.time).notifier).stop();
-              ref.read(timerProvider(levels.time).notifier).reset();
-              ref.read(moveProvider.notifier).state = 0;
-              ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
-
-
-            }, child: const Text('restart')),
-            TextButton(onPressed: () async {
-
-              // print(levels.toString());
-              // ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 2));
-              // ref.read(levelsControllerProvider.notifier).updateLevels();
-              // controllerCenter.play();
-            }, child: Text('confetti')),
+            // TextButton(
+            //     onPressed: () async {
+            //       ref.read(timerProvider(levels.time).notifier).stop();
+            //       ref.read(timerProvider(levels.time).notifier).reset();
+            //       ref.read(moveProvider.notifier).state = 0;
+            //       ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+            //     },
+            //     child: const Text('restart')),
+            const SizedBox(height: 16,),
+            InkWell(
+              onTap: () async {
+                ref.read(timerProvider(levels.time).notifier).stop();
+                ref.read(timerProvider(levels.time).notifier).reset();
+                ref.read(moveProvider.notifier).state = 0;
+                ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+              },
+              child: Container(
+                height: 50,
+                width: 140,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(FontAwesomeIcons.arrowRotateLeft),
+                    SizedBox(width: 8,),
+                    Text('Restart'),
+                  ],
+                ),
+              ),
+            ),
+            // TextButton(
+            //     onPressed: () async {
+                  // print(levels.toString());
+                  // ref.read(levelsControllerProvider.notifier).addLevels(levels.copyWith(finish: 2));
+                  // ref.read(levelsControllerProvider.notifier).updateLevels();
+                  // controllerCenter.play();
+                // },
+                // child: Text('confetti')),
           ],
         ),
       ),
     );
   }
 
-  String secondsToMinutes(int seconds) {
-    final duration = Duration(seconds: seconds);
-    String twoDigits(int n) {
-      if (n >= 10) return "$n";
-      return "0$n";
-    }
 
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$twoDigitMinutes:$twoDigitSeconds";
-  }
 }
