@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/features/home_screen/presentations/main_screen.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../../providers/providers.dart';
+import '../../../services/ad_controller.dart';
 import '../../../utils/enums.dart';
 import 'difficulty_screen.dart';
 import 'level_screen.dart';
@@ -14,6 +17,16 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+
+    useEffect(
+          () {
+        ref.read(adControllerProvider.notifier).createInterstitialAd();
+        return null;
+      },
+      [],
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle'),
