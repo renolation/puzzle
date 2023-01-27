@@ -55,3 +55,8 @@ final List<Levels> listLevels = [
     matrix: 4,
   ),
 ];
+
+const List<String> listTestDeviceId = [
+  '1CDCEF585F1F24221E77DE9D5353E8B3',
+  '8F5C04F2D79DF487149555AB835B72D1'
+];
