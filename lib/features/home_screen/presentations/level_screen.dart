@@ -35,7 +35,7 @@ class LevelScreen extends HookConsumerWidget {
                   onTap: () => ref
                       .read(homeScreenTypeProvider.notifier)
                       .update((state) => HomeScreenState.difficulty),
-                  child: Icon(Icons.arrow_left),
+                  child: const Icon(Icons.arrow_left),
                 ),
 
               ],

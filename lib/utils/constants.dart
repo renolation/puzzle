@@ -1,6 +1,8 @@
 
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 const String apiKey = '563492ad6f91700001000001aeede8e77c6f48b8a213989da4005d3e';
 
 final colors = [
@@ -20,3 +22,15 @@ final colors = [
 
 final Color borderColor = Color(0xffd3d3d3);
 final Color foregroundColor = Color(0xff595959);
+
+const colorizeColors = [
+  Colors.purple,
+  Colors.blue,
+  Colors.yellow,
+  Colors.red,
+];
+
+const colorizeTextStyle = TextStyle(
+  fontSize: 35.0,
+  fontFamily: 'Horizon',
+);
