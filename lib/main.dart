@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -46,14 +47,16 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final goRouter = ref.watch(goRouterProvider);
-
+    final textTheme = Theme.of(context).textTheme;
     return MaterialApp.router(
       routerConfig: goRouter,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
-      ),
+        textTheme: GoogleFonts.sourceCodeProTextTheme(textTheme).copyWith(
+          bodyText2: GoogleFonts.sourceCodePro(textStyle: textTheme.bodyText2),
+        ),      ),
 
     );
   }

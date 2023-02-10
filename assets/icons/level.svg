@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 216.86 216.86">
+  <g id="objects">
+    <g id="share_button">
+      <g>
+        <rect width="216.86" height="216.86" rx="42.89" ry="42.89" fill="#211e4c"/>
+        <rect x="11.96" y="11.96" width="192.94" height="192.94" rx="34.46" ry="34.46" fill="#fff"/>
+        <path d="M108.26,125.98c-39.02,0-73.77-18.2-96.3-46.55v91.01c0,19.03,15.43,34.46,34.46,34.46h124.02c19.03,0,34.46-15.43,34.46-34.46V79c-22.51,28.6-57.42,46.98-96.64,46.98Z" opacity=".1"/>
+        <g>
+          <circle cx="34.11" cy="33.34" r="8.52" fill="#211e4c"/>
+          <circle cx="34.11" cy="181.22" r="8.52" transform="translate(-118.15 77.19) rotate(-45)" fill="#211e4c"/>
+          <circle cx="182.75" cy="33.34" r="8.52" fill="#211e4c"/>
+          <circle cx="182.75" cy="181.22" r="8.52" transform="translate(-55.44 83.73) rotate(-22.5)" fill="#211e4c"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -373,32 +373,32 @@ class PlayScreen extends HookConsumerWidget {
               // },
               // child: Text('confetti')),
           const Spacer(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: 200,
-              height: 50,
-              color: Colors.red,
-            ),
-          ),
-          const SizedBox(height: 16,),
           // Align(
           //   alignment: Alignment.bottomCenter,
-          //   child: Consumer(builder: (context, ref, child){
-          //     final adController  = ref.watch(adControllerProvider);
-          //     if (adController.anchoredAdaptiveAd != null &&
-          //         adController.isLoaded) {
-          //       final AdWidget adWidget = AdWidget(ad: adController.anchoredAdaptiveAd!);
-          //       return Container(
-          //       alignment: Alignment.center,
-          //       width: adController.anchoredAdaptiveAd!.size.width.toDouble(),
-          //       height: adController.anchoredAdaptiveAd!.size.height.toDouble(),
-          //       child:  adWidget,
-          //     );
-          //     }
-          //     return const SizedBox();
-          //   }),
+          //   child: Container(
+          //     width: 200,
+          //     height: 50,
+          //     color: Colors.red,
+          //   ),
           // ),
+          const SizedBox(height: 16,),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Consumer(builder: (context, ref, child){
+              final adController  = ref.watch(adControllerProvider);
+              if (adController.anchoredAdaptiveAd != null &&
+                  adController.isLoaded) {
+                final AdWidget adWidget = AdWidget(ad: adController.anchoredAdaptiveAd!);
+                return Container(
+                alignment: Alignment.center,
+                width: adController.anchoredAdaptiveAd!.size.width.toDouble(),
+                height: adController.anchoredAdaptiveAd!.size.height.toDouble(),
+                child:  adWidget,
+              );
+              }
+              return const SizedBox();
+            }),
+          ),
         ],
       ),
     );

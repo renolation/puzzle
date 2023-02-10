@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../providers/providers.dart';
@@ -13,32 +14,20 @@ class DifficultyScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
-        InkWell(
-          onTap: () => ref.read(homeScreenTypeProvider.notifier).update((state) => HomeScreenState.main),
-          child: const Align(
-              alignment: Alignment.centerLeft,
-              child: Icon(Icons.arrow_left)),
-        ),
         Expanded(
           child: Column(
             children: [
+              const SizedBox(height: 32,),
               Expanded(
                 child: InkWell(
                   onTap: () {
                     ref.read(difficultyProvider.notifier).state = Difficulty.easy.index + 1;
                     ref.read(homeScreenTypeProvider.notifier).update((state) => HomeScreenState.level);
                   },
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Center(
-                      child: Text('Easy'),
-                    ),
+                  child: SvgPicture.asset(
+                      'assets/icons/easy.svg',
+                      semanticsLabel: 'Acme Logo',
+                      fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
@@ -48,14 +37,9 @@ class DifficultyScreen extends HookConsumerWidget {
                     ref.read(difficultyProvider.notifier).state = Difficulty.medium.index + 1;
                     ref.read(homeScreenTypeProvider.notifier).update((state) => HomeScreenState.level);
                   },
-                  child: Container(
-                    color: Colors.red,
-                    width: double.infinity,
-                    height: double.infinity,
-                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: const Center(
-                      child: Text('Medium'),
-                    ),
+                  child: SvgPicture.asset(
+                      'assets/icons/normal.svg',
+                      semanticsLabel: 'Acme Logo'
                   ),
                 ),
               ),
@@ -65,17 +49,13 @@ class DifficultyScreen extends HookConsumerWidget {
                     ref.read(difficultyProvider.notifier).state = Difficulty.hard.index + 1;
                     ref.read(homeScreenTypeProvider.notifier).update((state) => HomeScreenState.level);
                   },
-                  child: Container(
-                    color: Colors.red,
-                    width: double.infinity,
-                    height: double.infinity,
-                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    child: const Center(
-                      child: Text('Hard'),
-                    ),
+                  child: SvgPicture.asset(
+                      'assets/icons/hard.svg',
+                      semanticsLabel: 'Acme Logo'
                   ),
                 ),
               ),
+              const SizedBox(height: 32,),
             ],
           ),
         ),

@@ -22,14 +22,12 @@ class MainScreen extends HookConsumerWidget {
       children: [
         const SizedBox(height: 36,),
         SizedBox(
-          width: 250.0,
+          // width: 250.0,
           child: AnimatedTextKit(
             animatedTexts: [
               ColorizeAnimatedText(
                 'Sliding Puzzler',
-                textStyle:  GoogleFonts.lato(
-                  textStyle: const TextStyle(fontSize: 35,color: Colors.blue, letterSpacing: .5),
-                ),
+                textStyle:  const TextStyle(fontSize: 35),
                 colors: colorizeColors,
               ),
             ],
@@ -50,9 +48,7 @@ class MainScreen extends HookConsumerWidget {
           height: 32,
         ),
         DefaultTextStyle(
-          style:  GoogleFonts.lato(
-            textStyle: const TextStyle(fontSize: 30, color: Colors.blue, letterSpacing: .5),
-          ),
+          style:  const TextStyle(fontSize: 35),
           child: AnimatedTextKit(
             animatedTexts: [
               WavyAnimatedText('Tap to START'),

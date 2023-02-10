@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/features/home_screen/presentations/main_screen.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
 import '../../../providers/providers.dart';
 import '../../../services/ad_controller.dart';
 import '../../../utils/enums.dart';
@@ -29,7 +28,36 @@ class HomeScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // title: const Text('Puzzle'),
+        leading: Consumer(builder: (context, ref, child) {
+          final homeScreenType = ref.watch(homeScreenTypeProvider);
+          switch(homeScreenType){
+            case HomeScreenState.main:
+              return const SizedBox();
+            case HomeScreenState.difficulty:
+              return IconButton(onPressed: (){
+                ref
+                    .read(homeScreenTypeProvider.notifier)
+                    .update((state) => HomeScreenState.main);
+              }, icon: const Icon(FontAwesomeIcons.arrowLeft));
+            case HomeScreenState.level:
+              return IconButton(onPressed: (){
+                ref
+                    .read(homeScreenTypeProvider.notifier)
+                    .update((state) => HomeScreenState.difficulty);
+              }, icon: const Icon(FontAwesomeIcons.arrowLeft));
+          }
+        }),
+        title: Consumer(builder: (context, ref, child) {
+          final homeScreenType = ref.watch(homeScreenTypeProvider);
+          switch(homeScreenType){
+            case HomeScreenState.main:
+              return const Text('');
+            case HomeScreenState.difficulty:
+              return const Text('Difficulty');
+            case HomeScreenState.level:
+              return const Text('Level selection');
+          }
+        }),
         backgroundColor: const Color(0xff55CCD5),
       ),
       body: Container(
@@ -45,13 +73,13 @@ class HomeScreen extends HookConsumerWidget {
                   switch(homeScreenType){
                     case HomeScreenState.main:
                       return const MainScreen();
-                      break;
+
                     case HomeScreenState.difficulty:
                       return const DifficultyScreen();
-                      break;
+
                     case HomeScreenState.level:
                       return const LevelScreen();
-                      break;
+
                   }
                 }),
               ),
