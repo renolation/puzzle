@@ -115,7 +115,7 @@ class PlayScreen extends HookConsumerWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          actions: [
+          actions: const [
             // IconButton(onPressed: (){
             //   showDialog(context: context, builder: (context){
             //     return AlertDialog(
@@ -132,7 +132,7 @@ class PlayScreen extends HookConsumerWidget {
             //     );
             //   });
             // }, icon: const Icon(FontAwesomeIcons.volumeHigh)),
-            const SizedBox(width: 8,),
+            SizedBox(width: 8,),
           ],
         ),
         body: Column(
@@ -288,15 +288,14 @@ class PlayScreen extends HookConsumerWidget {
                                           ref.read(levelsControllerProvider.notifier).updateLevels();
                                           showDialog(context: context, builder: (context){
                                             return AlertDialog(
-                                              title: Text('Select next level'),
+                                              title: const Text('Select next level'),
                                               actions: [
                                                 TextButton(
                                                   onPressed: (){
                                                     Navigator.pop(context);
                                                     Navigator.pop(context);
-
                                                   },
-                                                  child: Text('Ok'),
+                                                  child: const Text('Ok'),
                                                 ),
                                               ],
                                             );

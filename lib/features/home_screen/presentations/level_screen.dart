@@ -41,7 +41,7 @@ class LevelScreen extends HookConsumerWidget {
                         if( (data[index].level == 1 && data[index].difficulty == 1) ||
                             (index > 0 && data[index -1].finish != 0)){
 
-                          if(ref.read(playTimeProvider.notifier).state % 3 == 0){
+                          if(ref.read(playTimeProvider.notifier).state % 3 == 0 && ref.read(playTimeProvider.notifier).state > 0){
                             ref.read(adControllerProvider.notifier).showInterstitialAd();
                           }
                           ref.read(playTimeProvider.notifier).state++;
