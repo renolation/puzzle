@@ -98,8 +98,8 @@ class PlayScreen extends HookConsumerWidget {
       onWillPop: () async {
           showDialog(context: context, builder: (context){
             return AlertDialog(
-              title: Text('Your game will not save'),
-              content: Text('Are you sure?'),
+              title: const Text('Your game will not save'),
+              content: const Text('Are you sure?'),
               actions: [
                 TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
                 TextButton(onPressed: () {
