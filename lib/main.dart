@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,6 +13,7 @@ import 'package:reno_puzzle/utils/data.dart';
 
 import 'features/home_screen/domains/levels.dart';
 import 'features/play_screen/presentations/play_screen.dart';
+import 'firebase_options.dart';
 import 'routing/app_router.dart';
 
 const levelsBox = 'levelsBox';
@@ -20,6 +22,10 @@ const levelsBox = 'levelsBox';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   MobileAds.instance
       .updateRequestConfiguration(RequestConfiguration(

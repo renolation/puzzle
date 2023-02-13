@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "565346793059",
+    "project_id": "puzzle-8dd5d",
+    "storage_bucket": "puzzle-8dd5d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565346793059:android:70d9736665a156ba676a56",
+        "android_client_info": {
+          "package_name": "com.renolation.reno_puzzle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "565346793059-am0cfdkkpt4632o31apjeshn8hlbfpb3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ZNyAYqyNkraDHHLkRCHMBWkQTARN8K4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "565346793059-am0cfdkkpt4632o31apjeshn8hlbfpb3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
