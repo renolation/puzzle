@@ -97,6 +97,7 @@ class PlayScreen extends HookConsumerWidget {
     return WillPopScope(
       onWillPop: () async {
           if(ref.read(moveProvider.notifier).state > 0){
+            controllerCenter.play();
             showDialog(context: context, builder: (context){
               return AlertDialog(
                 title: const Text('Your game will not save'),
@@ -280,7 +281,7 @@ class PlayScreen extends HookConsumerWidget {
                                         if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
                                           dev.log('success');
                                           // ref.read(isSuccessProvider.notifier).state = true;
-
+                                          controllerCenter.play();
                                           ref.read(timerProvider(levels.time).notifier).stop();
                                           ref
                                               .read(levelsControllerProvider.notifier)
@@ -391,10 +392,25 @@ class PlayScreen extends HookConsumerWidget {
             const SizedBox(height: 16,),
             InkWell(
               onTap: () async {
-                ref.read(timerProvider(levels.time).notifier).stop();
-                ref.read(timerProvider(levels.time).notifier).reset();
-                ref.read(moveProvider.notifier).state = 0;
-                ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('All steps will be lost?'),
+                      actions: [
+                        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                        TextButton(onPressed: () {
+                          ref.read(adControllerProvider.notifier).showInterstitialAd();
+                          Navigator.pop(context);
+                          ref.read(timerProvider(levels.time).notifier).stop();
+                          ref.read(timerProvider(levels.time).notifier).reset();
+                          ref.read(moveProvider.notifier).state = 0;
+                          ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+                        }, child: const Text('Restart')),
+                      ],
+                    );
+                  }
+                );
               },
               child: Container(
                 height: 50,
