@@ -1,6 +1,7 @@
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -348,7 +349,8 @@ class PlayScreen extends HookConsumerWidget {
             },
             child: Container(
               height: 50,
-              width: 140,
+              width: 160,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.8),
                 borderRadius: BorderRadius.circular(16),
@@ -356,10 +358,14 @@ class PlayScreen extends HookConsumerWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(FontAwesomeIcons.arrowRotateLeft),
-                  SizedBox(width: 8,),
-                  Text('Restart'),
+                children: [
+                SvgPicture.asset(
+                    'assets/icons/restart.svg',
+                    semanticsLabel: 'Acme Logo',
+                  width: 45,
+                ),
+                const SizedBox(width: 8,),
+                  const Text('Restart', style: TextStyle(fontSize: 20),),
                 ],
               ),
             ),

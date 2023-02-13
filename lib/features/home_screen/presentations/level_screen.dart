@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/features/home_screen/data/levels_controller.dart';
 
 import '../../../providers/providers.dart';
+import '../../../routing/app_router.dart';
 
 class LevelScreen extends HookConsumerWidget {
   const LevelScreen({
@@ -32,18 +34,25 @@ class LevelScreen extends HookConsumerWidget {
                       mainAxisSpacing: 32),
                   itemCount: data.length,
                   itemBuilder: (context, index) {
-                    return Stack(
-                      children: [
-                        Positioned.fill(
-                          child: SvgPicture.asset('assets/icons/level.svg',
-                              semanticsLabel: 'Acme Logo'),
-                        ),
-                        Center(
-                            child: Text(
-                          '${data[index].level}',
-                          style: const TextStyle(fontSize: 50),
-                        )),
-                      ],
+                    return InkWell(
+                      onTap: (){
+                        context.goNamed(
+                            AppRoute.play.name,
+                            extra: data[index]);
+                      },
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: SvgPicture.asset('assets/icons/level.svg',
+                                semanticsLabel: 'Acme Logo'),
+                          ),
+                          Center(
+                              child: Text(
+                            '${data[index].level}',
+                            style: const TextStyle(fontSize: 50),
+                          )),
+                        ],
+                      ),
                     );
                   }),
             );

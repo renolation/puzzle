@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -20,47 +21,40 @@ class MainScreen extends HookConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 36,),
-        SizedBox(
-          // width: 250.0,
-          child: AnimatedTextKit(
-            animatedTexts: [
-              ColorizeAnimatedText(
-                'Sliding Puzzler',
-                textStyle:  const TextStyle(fontSize: 35),
-                colors: colorizeColors,
-              ),
-            ],
-            isRepeatingAnimation: true,
-            onTap: () {
-              print("Tap Event");
-            },
-          ),
+        const SizedBox(
+          height: 36,
         ),
+        // SizedBox(
+        //   // width: 250.0,
+        //   child: AnimatedTextKit(
+        //     animatedTexts: [
+        //       ColorizeAnimatedText(
+        //         'Sliding Puzzler',
+        //         textStyle: const TextStyle(fontSize: 35),
+        //         colors: colorizeColors,
+        //       ),
+        //     ],
+        //     isRepeatingAnimation: true,
+        //     onTap: () {
+        //       print("Tap Event");
+        //     },
+        //   ),
+        // ),
         const SizedBox(
           height: 16,
         ),
-        const Center(
-            child: FlutterLogo(
-          size: 230,
+         Center(
+            child: Image.asset(
+          'assets/icons/logo.png',
         )),
         const SizedBox(
           height: 32,
         ),
-        DefaultTextStyle(
-          style:  const TextStyle(fontSize: 35),
-          child: AnimatedTextKit(
-            animatedTexts: [
-              WavyAnimatedText('Tap to START'),
-            ],
-            isRepeatingAnimation: true,
-            onTap: () {
-              ref
-                  .read(homeScreenTypeProvider.notifier)
-                  .update((state) => HomeScreenState.difficulty);
-            },
-          ),
-        ),
+        InkWell(
+            onTap: () =>  ref
+                .read(homeScreenTypeProvider.notifier)
+                .update((state) => HomeScreenState.difficulty),
+            child: SvgPicture.asset('assets/icons/play.svg', semanticsLabel: 'Acme Logo')),
       ],
     );
   }
