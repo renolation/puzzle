@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/features/home_screen/data/levels_controller.dart';
@@ -36,9 +37,15 @@ class LevelScreen extends HookConsumerWidget {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: (){
-                        context.goNamed(
-                            AppRoute.play.name,
-                            extra: data[index]);
+                        if( (data[index].level == 1 && data[index].difficulty == 1) ||
+                            (index > 0 && data[index -1].finish != 0)){
+                          context.goNamed(
+                              AppRoute.play.name,
+                              extra: data[index]);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('You needs to complete last level')));
+                        }
+                       
                       },
                       child: Stack(
                         children: [
@@ -46,11 +53,15 @@ class LevelScreen extends HookConsumerWidget {
                             child: SvgPicture.asset('assets/icons/level.svg',
                                 semanticsLabel: 'Acme Logo'),
                           ),
-                          Center(
-                              child: Text(
-                            '${data[index].level}',
-                            style: const TextStyle(fontSize: 50),
-                          )),
+                          // Center(
+                          //   child: Text('${data[index].level} ${data[index].finish} '),
+                          // ),
+
+                          (data[index].level == 1 && data[index].difficulty == 1) ||
+                              (index > 0 && data[index -1].finish != 0)
+                          ? Center(child: Text('${data[index].level}', style: const TextStyle(fontSize: 50),))
+                          :const Center(child: Icon(FontAwesomeIcons.lock, color: Colors.yellow, size: 36,)),
+
                         ],
                       ),
                     );
