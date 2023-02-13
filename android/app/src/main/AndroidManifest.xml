@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.renolation.reno_puzzle">
-   <application
-        android:label="reno_puzzle"
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+    <application
+        android:label="Sliding Puzzler"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_puzzle">
         <activity

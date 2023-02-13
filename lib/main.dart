@@ -50,7 +50,7 @@ class MyApp extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
     return MaterialApp.router(
       routerConfig: goRouter,
-      title: 'Flutter Demo',
+      title: 'Sliding Puzzler',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         useMaterial3: true,
