@@ -80,10 +80,10 @@ class PlayScreen extends HookConsumerWidget {
                   ),
                   TextButton(
                       onPressed: () {
-                        // ref.read(timerProvider(levels.time).notifier).stop();
-                        // ref.read(timerProvider(levels.time).notifier).reset();
-                        // ref.read(moveProvider.notifier).state = 0;
-                        // ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
+                        ref.read(timerProvider(levels.time).notifier).stop();
+                        ref.read(timerProvider(levels.time).notifier).reset();
+                        ref.read(moveProvider.notifier).state = 0;
+                        ref.read(listImageControllerProvider.notifier).convertAsset(levels.pathAsset, levels.matrix);
                         Navigator.pop(context);
                       },
                       child: const Text('Watch')),
@@ -116,7 +116,22 @@ class PlayScreen extends HookConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(onPressed: (){}, icon: const Icon(FontAwesomeIcons.volumeHigh)),
+            // IconButton(onPressed: (){
+            //   showDialog(context: context, builder: (context){
+            //     return AlertDialog(
+            //       title: Text('Select next level'),
+            //       actions: [
+            //         TextButton(
+            //           onPressed: (){
+            //             Navigator.pop(context);
+            //             Navigator.pop(context);
+            //           },
+            //           child: Text('Ok'),
+            //         ),
+            //       ],
+            //     );
+            //   });
+            // }, icon: const Icon(FontAwesomeIcons.volumeHigh)),
             const SizedBox(width: 8,),
           ],
         ),
@@ -265,11 +280,27 @@ class PlayScreen extends HookConsumerWidget {
                                         if (ref.read(listImageControllerProvider.notifier).detectSuccess()) {
                                           dev.log('success');
                                           // ref.read(isSuccessProvider.notifier).state = true;
+
                                           ref.read(timerProvider(levels.time).notifier).stop();
                                           ref
                                               .read(levelsControllerProvider.notifier)
                                               .addLevels(levels.copyWith(finish: 3));
                                           ref.read(levelsControllerProvider.notifier).updateLevels();
+                                          showDialog(context: context, builder: (context){
+                                            return AlertDialog(
+                                              title: Text('Select next level'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: (){
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+
+                                                  },
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          });
                                         }
                                       } else {
                                         dev.log('wrong');
