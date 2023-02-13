@@ -96,19 +96,21 @@ class PlayScreen extends HookConsumerWidget {
 
     return WillPopScope(
       onWillPop: () async {
-          showDialog(context: context, builder: (context){
-            return AlertDialog(
-              title: const Text('Your game will not save'),
-              content: const Text('Are you sure?'),
-              actions: [
-                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-                TextButton(onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }, child: const Text('Ok')),
-              ],
-            );
-          });
+          if(ref.read(moveProvider.notifier).state > 0){
+            showDialog(context: context, builder: (context){
+              return AlertDialog(
+                title: const Text('Your game will not save'),
+                content: const Text('Are you sure?'),
+                actions: [
+                  TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+                  TextButton(onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }, child: const Text('Ok')),
+                ],
+              );
+            });
+          }
           return Future.value(true);
       },
       child: Scaffold(

@@ -7,6 +7,7 @@ import '../utils/enums.dart';
 final homeScreenTypeProvider = StateProvider<HomeScreenState>((ref) => HomeScreenState.main);
 
 final difficultyProvider = StateProvider<int>((ref) => 1);
+final playTimeProvider = StateProvider<int>((ref) => 0);
 final isSuccessProvider = StateProvider<bool>((ref) => false);
 
 

@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/features/home_screen/data/levels_controller.dart';
+import '../../../services/ad_controller.dart';
 
 import '../../../providers/providers.dart';
 import '../../../routing/app_router.dart';
@@ -39,6 +40,11 @@ class LevelScreen extends HookConsumerWidget {
                       onTap: (){
                         if( (data[index].level == 1 && data[index].difficulty == 1) ||
                             (index > 0 && data[index -1].finish != 0)){
+
+                          if(ref.read(playTimeProvider.notifier).state % 3 == 0){
+                            ref.read(adControllerProvider.notifier).showInterstitialAd();
+                          }
+                          ref.read(playTimeProvider.notifier).state++;
                           context.goNamed(
                               AppRoute.play.name,
                               extra: data[index]);
