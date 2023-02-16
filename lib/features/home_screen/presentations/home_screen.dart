@@ -62,6 +62,7 @@ class HomeScreen extends HookConsumerWidget {
       ),
       body: Container(
         color: const Color(0xff55CCD5),
+        width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

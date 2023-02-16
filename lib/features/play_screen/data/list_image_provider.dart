@@ -42,7 +42,7 @@ class ListImageController extends StateNotifier<List<List<Puzzle>>> {
     List<Puzzle> output = [];
 
     for(int i = 0; i< parts.length;i++){
-      img.Color color = img.ColorRgba8(Colors.red.red,Colors.red.green,Colors.red.blue,Colors.red.alpha);
+      img.Color color = img.ColorRgba8(Colors.pink.red,Colors.pink.green,Colors.pink.blue,Colors.pink.alpha);
       Puzzle puzzle = Puzzle(unit8List: img.encodeJpg(parts[i]), index: i);
       if(i == parts.length -1){
         img.fill(parts[i], color: color);

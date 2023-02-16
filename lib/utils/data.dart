@@ -106,7 +106,7 @@ final List<Levels> listLevels = [
     level: 6,
     step: 250,
     time: 700,
-    pathAsset: 'assets/photo/puzzle-13.png',
+    pathAsset: 'assets/photo/puzzle-13.jpg',
     matrix: 3,
   ),
 
@@ -115,7 +115,7 @@ final List<Levels> listLevels = [
     level: 7,
     step: 250,
     time: 600,
-    pathAsset: 'assets/photo/puzzle-14.png',
+    pathAsset: 'assets/photo/puzzle-14.jpg',
     matrix: 3,
   ),
 
@@ -124,7 +124,7 @@ final List<Levels> listLevels = [
     level: 1,
     step: 200,
     time: 1200,
-    pathAsset: 'assets/photo/puzzle-15.png',
+    pathAsset: 'assets/photo/puzzle-15.jpg',
     matrix: 5,
   ),
   const Levels(
@@ -150,7 +150,7 @@ final List<Levels> listLevels = [
     level: 4,
     step: 200,
     time: 900,
-    pathAsset: 'assets/photo/puzzle-18.png',
+    pathAsset: 'assets/photo/puzzle-18.jpeg',
     matrix: 5,
   ),
   const Levels(
@@ -176,7 +176,7 @@ final List<Levels> listLevels = [
     level: 7,
     step: 200,
     time: 600,
-    pathAsset: 'assets/photo/puzzle-21.png',
+    pathAsset: 'assets/photo/puzzle-21.jpg',
     matrix: 5,
   ),
 

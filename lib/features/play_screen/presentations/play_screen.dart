@@ -97,7 +97,7 @@ class PlayScreen extends HookConsumerWidget {
     return WillPopScope(
       onWillPop: () async {
           if(ref.read(moveProvider.notifier).state > 0){
-            controllerCenter.play();
+
             showDialog(context: context, builder: (context){
               return AlertDialog(
                 title: const Text('Your game will not save'),
@@ -312,10 +312,21 @@ class PlayScreen extends HookConsumerWidget {
                                         child: Stack(
                                           children: [
                                             Image.memory(listImage[row][col].unit8List!),
-                                            Text(
-                                              listImage[row][col].index.toString(),
-                                              style: const TextStyle(color: Colors.yellow),
+                                            Positioned(
+                                              top: 0,
+                                              left: 0,
+                                              child: Container(
+                                                width: 15,
+                                                height: 15,
+                                                color: Colors.white.withOpacity(0.3),
+                                                child: Center(
+                                                  child: Text(
+                                                  listImage[row][col].index.toString(),
+                                                  style: const TextStyle(color: Colors.black,
+                                                  ),
                                             ),
+                                                ),
+                                              ),),
                                           ],
                                         )),
                                   );
@@ -453,23 +464,23 @@ class PlayScreen extends HookConsumerWidget {
             //   ),
             // ),
             const SizedBox(height: 16,),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Consumer(builder: (context, ref, child){
-                final adController  = ref.watch(adControllerProvider);
-                if (adController.anchoredAdaptiveAd != null &&
-                    adController.isLoaded) {
-                  final AdWidget adWidget = AdWidget(ad: adController.anchoredAdaptiveAd!);
-                  return Container(
-                  alignment: Alignment.center,
-                  width: adController.anchoredAdaptiveAd!.size.width.toDouble(),
-                  height: adController.anchoredAdaptiveAd!.size.height.toDouble(),
-                  child:  adWidget,
-                );
-                }
-                return const SizedBox();
-              }),
-            ),
+            // Align(
+            //   alignment: Alignment.bottomCenter,
+            //   child: Consumer(builder: (context, ref, child){
+            //     final adController  = ref.watch(adControllerProvider);
+            //     if (adController.anchoredAdaptiveAd != null &&
+            //         adController.isLoaded) {
+            //       final AdWidget adWidget = AdWidget(ad: adController.anchoredAdaptiveAd!);
+            //       return Container(
+            //       alignment: Alignment.center,
+            //       width: adController.anchoredAdaptiveAd!.size.width.toDouble(),
+            //       height: adController.anchoredAdaptiveAd!.size.height.toDouble(),
+            //       child:  adWidget,
+            //     );
+            //     }
+            //     return const SizedBox();
+            //   }),
+            // ),
           ],
         ),
       ),
