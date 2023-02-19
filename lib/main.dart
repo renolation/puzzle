@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +11,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:reno_puzzle/providers/providers.dart';
 import 'package:reno_puzzle/utils/data.dart';
+import 'package:reno_puzzle/utils/firebase_provider.dart';
 
 import 'features/home_screen/domains/levels.dart';
 import 'features/play_screen/presentations/play_screen.dart';
@@ -26,6 +28,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+
 
   MobileAds.instance
       .updateRequestConfiguration(RequestConfiguration(
@@ -35,15 +40,16 @@ Future<void> main() async {
   ));
 
 
-
   await Hive.initFlutter();
   Hive.registerAdapter(LevelsAdapter());
   await Hive.openBox<Levels>(levelsBox);
 
-  runApp( const
+  runApp(
      ProviderScope(
         overrides: [
-    ],child:  MyApp(),),
+          analyticsProvider.overrideWithValue(analytics),
+              ],
+    child: const MyApp(),),
   );
 }
 
@@ -52,6 +58,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final goRouter = ref.watch(goRouterProvider);
     final textTheme = Theme.of(context).textTheme;
     return MaterialApp.router(

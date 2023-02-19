@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/utils/data.dart';
+import 'package:reno_puzzle/utils/firebase_provider.dart';
 import 'dart:developer' as dev;
 import '../domains/levels.dart';
 import 'levels_api.dart';
@@ -14,6 +15,7 @@ class LevelsRepository {
 
   Future<Levels> fetchLevelsOnline({required int id, CancelToken? cancelToken}) async {
     try {
+
       final res = await levelsApi.fetchLevels(id: id, cancelToken: cancelToken);
       final levels = Levels.fromJson(res);
       return levels;

@@ -3,8 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:reno_puzzle/features/home_screen/presentations/main_screen.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:reno_puzzle/utils/firebase_provider.dart';
 import '../../../providers/providers.dart';
 import '../../../services/ad_controller.dart';
+import '../../../services/app_lifecycle_reactor.dart';
+import '../../../services/app_open_ad_manager.dart';
 import '../../../utils/enums.dart';
 import 'difficulty_screen.dart';
 import 'level_screen.dart';
@@ -17,14 +20,26 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
+    logApp() async {
+      await ref.read(analyticsProvider).logAppOpen();
+    }
+
+    late AppLifecycleReactor _appLifecycleReactor;
 
     useEffect(
           () {
         ref.read(adControllerProvider.notifier).createInterstitialAd();
+        logApp();
+        AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+        _appLifecycleReactor =
+            AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+        _appLifecycleReactor.listenToAppStateChanges();
         return null;
       },
       [],
     );
+
+
 
     return Scaffold(
       appBar: AppBar(
